@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Box, Container, Typography } from "@mui/material"
+import FlashCard from "./components/FlashCard"
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react"
+import CardForm from "./components/CardForm"
+import { setCards } from "./redux/cardReducer"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const cards = useSelector(state => state.card)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const cardsLocal = localStorage.getItem("flashCards")
+    if (cardsLocal) {
+      const saved = JSON.parse(cardsLocal)
+      const savedValidated = Array.isArray(saved) ? saved : [saved]
+      dispatch(setCards(savedValidated))
+    }
+  }, [dispatch])
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Container>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={2}
+        >
+        <Typography variant="h1" fontSize={46} align="center">Mejora tu experiencia de aprendizaje</Typography>
+        <CardForm/>
+        <Box
+          display="flex"
+          flexDirection="row"
+          flexWrap="wrap"
+          gap={2}
+          >
+          {cards.map((c) => 
+            <FlashCard key={c.id} frontText={c.front} backText={c.back}/>
+          )}
+        </Box>
+      </Box>
+    </Container>
   )
 }
-
+                                                                                                                                                                
 export default App
