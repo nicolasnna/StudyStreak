@@ -1,6 +1,8 @@
 import { Card, CardContent, Typography } from "@mui/material"
 import PropTypes from 'prop-types'
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { deleteCardById } from "../redux/cardReducer"
 
 const cardStyle = {
   width: "max-content",
@@ -10,33 +12,39 @@ const cardStyle = {
   padding: 1,
 }
 
-
-const FlashCard = ({frontText, backText}) => {
+const FlashCard = ({cardContent}) => {
   const [flipped, setFlipped] = useState(false)
+  const dispatch = useDispatch()
 
-  const frontElement = flipped ? 'none' : ''
-  const backElement = flipped ? '' : 'none'
+  const frontElement = flipped ? 'none' : 'flex'
+  const backElement = flipped ? 'flex' : 'none'
 
   const ChangeFlipped = () => {
     setFlipped(!flipped)
   }
 
+  const deleteFlashCard = () => {
+    dispatch(deleteCardById(cardContent.id))
+  }
+
   return ( 
     <Card sx={cardStyle}>
-      <CardContent sx={{display: frontElement}}>
-        <Typography variant="body1" fontSize={16}>{frontText}</Typography>
+      <CardContent sx={{display: frontElement, flexDirection: 'column'}}>
+        <button onClick={deleteFlashCard}>Delete</button>
+        <Typography variant="body1" fontSize={16}>{cardContent.front}</Typography>
+        <button onClick={ChangeFlipped}>.</button>
       </CardContent>
-      <CardContent sx={{display: backElement}}>
-        <Typography variant="body1" fontSize={14}>{backText}</Typography>
+      <CardContent sx={{display: backElement, flexDirection: 'column'}}>
+        <Typography variant="body1" fontSize={14}>{cardContent.front}</Typography>
+        <button onClick={ChangeFlipped}>.</button>
       </CardContent>
-      <button onClick={ChangeFlipped}>.</button>
+      
     </Card>
   )
 }
 
 FlashCard.propTypes = {
-  frontText: PropTypes.string,
-  backText: PropTypes.string
+  cardContent: PropTypes.object,
 }
 
 export default FlashCard

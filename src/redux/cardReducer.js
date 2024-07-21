@@ -12,10 +12,13 @@ export const cardSlice = createSlice({
     addCard(state, action) {
       state.push(action.payload)
     },
+    deleteCard(state, action) {
+      return state.filter(c => c.id !== action.payload)
+    }
   }
 })
 
-export const { setCards, addCard } = cardSlice.actions
+export const { setCards, addCard, deleteCard } = cardSlice.actions
 
 export const createCard = (card) => {
   return async dispatch => {
@@ -32,6 +35,15 @@ export const createCard = (card) => {
     } else {
       localStorage.setItem("flashCards", JSON.stringify(cardWithId))
     }
+  }
+}
+
+export const deleteCardById = (id) => {
+  return async dispatch => {
+    dispatch(deleteCard(id))
+    const savedLocal = localStorage.getItem("flashCards")
+    const listCard = JSON.parse(savedLocal).filter(c => c.id !== id)
+    localStorage.setItem('flashCards', JSON.stringify(listCard))
   }
 }
 

@@ -34,7 +34,7 @@ function App() {
           gap={2}
           >
           {cards.map((c) => 
-            <FlashCard key={c.id} frontText={c.front} backText={c.back}/>
+            <FlashCard key={c.id} cardContent={c}/>
           )}
         </Box>
       </Box>
