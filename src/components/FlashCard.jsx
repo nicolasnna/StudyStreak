@@ -12,7 +12,7 @@ const cardStyle = {
   padding: 1,
 }
 
-const FlashCard = ({cardContent}) => {
+const FlashCard = ({cardContent, handleOnDrop}) => {
   const [flipped, setFlipped] = useState(false)
   const dispatch = useDispatch()
 
@@ -27,8 +27,24 @@ const FlashCard = ({cardContent}) => {
     dispatch(deleteCardById(cardContent.id))
   }
 
+  const handleOnDrag = (e) => {
+    e.dataTransfer.setData('flashCardSelect', e.target.id)
+    e.dataTransfer.effectAllowed = "move"
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+  }
+
   return ( 
-    <Card sx={cardStyle}>
+    <Card 
+      id={cardContent.id} 
+      component="div" 
+      draggable 
+      onDragStart={handleOnDrag}
+      onDragOver={handleDragOver}
+      onDrop={handleOnDrop}
+      sx={cardStyle}>
       <CardContent sx={{display: frontElement, flexDirection: 'column'}}>
         <button onClick={deleteFlashCard}>Delete</button>
         <Typography variant="body1" fontSize={16}>{cardContent.front}</Typography>
@@ -45,6 +61,7 @@ const FlashCard = ({cardContent}) => {
 
 FlashCard.propTypes = {
   cardContent: PropTypes.object,
+  handleOnDrop: PropTypes.func
 }
 
 export default FlashCard
