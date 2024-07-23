@@ -1,7 +1,8 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Paper, Snackbar, TextField, Typography } from "@mui/material"
 import useField from "../hooks/useField"
 import { useDispatch } from "react-redux"
 import { createCard } from "../redux/cardReducer"
+import useNotification from "../hooks/useNotification"
 
 const fieldStyle = {
   width: "300px",
@@ -10,6 +11,7 @@ const fieldStyle = {
 const CardForm = () => {
   const frontField = useField()
   const backField = useField()
+  const notification = useNotification('')
   const dispatch = useDispatch()
 
   const cleanField = () => {
@@ -24,6 +26,8 @@ const CardForm = () => {
       back: backField.value
     }
     dispatch(createCard(card))
+    cleanField()
+    notification.handleOpen()
   }
 
   return (
@@ -71,6 +75,20 @@ const CardForm = () => {
           <Button size="small" variant="outlined" onClick={cleanField}>Limpiar</Button>
         </Box>
       </Box>
+      <Snackbar
+        open={notification.value}
+        autoHideDuration={3000}
+        onClose={notification.handleClose}
+        action={notification.action}
+      >
+        <Alert
+          onClose={notification.handleClose}
+          severity="success"
+          sx={{width:"100%"}}
+        >
+          Se ha creado una nueva flash card
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }
