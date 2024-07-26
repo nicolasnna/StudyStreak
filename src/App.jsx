@@ -5,9 +5,13 @@ import { useEffect } from "react"
 import CardForm from "./components/CardForm"
 import { setCards } from "./redux/cardReducer"
 import { getCardLocal, setCardLocal } from "./utils/localStorage"
+import OptionBar from "./components/OptionBar"
+import JsonManager from "./components/JsonManager"
+import { FontSize } from "./utils/constants"
 
 function App() {
   const cards = useSelector(state => state.card)
+  const toggleOptions = useSelector(state => state.toggle)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -30,9 +34,12 @@ function App() {
         display="flex"
         flexDirection="column"
         gap={2}
+        alignItems={"center"}
         >
-        <Typography variant="h1" fontSize={46} align="center">Mejora tu experiencia de aprendizaje</Typography>
-        <CardForm/>
+        <Typography variant="h1" fontSize={FontSize.TITLE} align="center">Mejora tu experiencia de aprendizaje</Typography>
+        <OptionBar/>
+        {toggleOptions.form && <CardForm/>}
+        {toggleOptions.jsonManage && <JsonManager/>}
         <Box
           display="flex"
           flexDirection="row"

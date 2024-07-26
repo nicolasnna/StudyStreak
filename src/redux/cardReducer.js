@@ -3,7 +3,7 @@ import { addCardLocal, deleteCardLocal } from "../utils/localStorage";
 
 const generateRandomId = () => '_' + Math.random().toString(36).slice(2, 9)
 
-export const cardSlice = createSlice({
+const cardSlice = createSlice({
   name: 'card',
   initialState: [],
   reducers: {

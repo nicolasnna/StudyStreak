@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { deleteCardById } from "../redux/cardReducer"
 import useNotification from "../hooks/useNotification"
+import { createPortal } from "react-dom"
 
 const cardStyle = {
   width: "max-content",
@@ -74,21 +75,24 @@ const FlashCard = ({cardContent, handleOnDrop}) => {
           <button onClick={ChangeFlipped}>.</button>
         </CardContent>
       </Card>
-      <Snackbar
-        open={notification.value}
-        autoHideDuration={3000}
-        onClose={notification.handleClose}
-        action={notification.action}
-      >
-        <Alert
+      {createPortal(
+        <Snackbar
+          open={notification.value}
+          autoHideDuration={3000}
           onClose={notification.handleClose}
-          severity="success"
-          color="info"
-          sx={{width:"100%"}}
+          action={notification.action}
         >
-          Se ha eliminado una flash card
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={notification.handleClose}
+            severity="success"
+            color="info"
+            sx={{width:"100%"}}
+          >
+            Se ha eliminado una flash card
+          </Alert>
+        </Snackbar>,
+        document.body
+      )}
       <Dialog
         open={openDialog}
         onClose={closeDialog}

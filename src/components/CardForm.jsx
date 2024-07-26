@@ -3,6 +3,7 @@ import useField from "../hooks/useField"
 import { useDispatch } from "react-redux"
 import { createCard } from "../redux/cardReducer"
 import useNotification from "../hooks/useNotification"
+import { FontSize, PaddingSize } from "../utils/constants"
 
 const fieldStyle = {
   width: "300px",
@@ -36,16 +37,19 @@ const CardForm = () => {
       sx={{
         display:"flex",
         flexDirection:"column",
-        width: "max-content"
+        width: "max-content",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 2,
+        padding: PaddingSize.NORMAL
       }}
       >
-      <Typography mt={2} variant="h2" fontSize={26} align="center">Crear nueva FlashCard</Typography>
+      <Typography variant="h2" fontSize={FontSize.BIG} align="center">Crear nueva FlashCard</Typography>
       <Box 
         component="form" 
         flexDirection={"column"} 
         display="flex" 
         gap={1}
-        padding={2}
         onSubmit={createNewCard}
         >
         <TextField
