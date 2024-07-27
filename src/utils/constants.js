@@ -2,7 +2,8 @@ export const FontSize = Object.freeze({
   TITLE: '4em',
   BIG: '1.7em',
   HIGH: '1.3em',
-  NORMAL: '1em'
+  NORMAL: '1em',
+  SMALL: '0.8em'
 })
 
 export const PaddingSize = Object.freeze({

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { CardKeys, FontSize, PaddingSize } from "../utils/constants"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import ArticleIcon from '@mui/icons-material/Article';
-import { setCards } from "../redux/cardReducer"
+import { setCards } from "../reducer/cardReducer"
 import { setCardLocal } from "../utils/localStorage"
 import { useState } from "react"
 

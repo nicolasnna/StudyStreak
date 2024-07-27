@@ -1,4 +1,4 @@
-import { IconButton } from "@mui/material"
+import { Alert, IconButton, Snackbar } from "@mui/material"
 import { Fragment, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -30,11 +30,31 @@ const useNotification = () => {
     </Fragment>
   )
 
+  const component = ({severity = 'success', label = ''}) => {
+    return (
+      <Snackbar
+        open={value}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        action={action}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          sx={{width:"100%"}}
+        >
+          {label}
+        </Alert>
+      </Snackbar>
+    )
+  }
+
   return {
     value,
     handleOpen,
     handleClose,
-    action
+    action,
+    component
   }
 }
 

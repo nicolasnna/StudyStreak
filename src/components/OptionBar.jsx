@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { changeForm, changeJsonManage } from "../redux/toggleReducer"
+import { changeForm, changeJsonManage } from "../reducer/toggleReducer"
 
 const OptionBar = () => {
   const toggleOptions = useSelector(state => state.toggle)

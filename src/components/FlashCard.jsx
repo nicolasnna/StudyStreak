@@ -2,7 +2,7 @@ import { Alert, Button, Card, CardContent, Dialog, DialogActions, DialogContent,
 import PropTypes from 'prop-types'
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { deleteCardById } from "../redux/cardReducer"
+import { deleteCardById } from "../reducer/cardReducer"
 import useNotification from "../hooks/useNotification"
 import { createPortal } from "react-dom"
 
@@ -104,7 +104,7 @@ const FlashCard = ({cardContent, handleOnDrop}) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Desea eliminar la flash card: <br/><strong>{cardContent.front}</strong> <br/>{cardContent.back}
+            Desea eliminar la flash card: <br/><strong>{cardContent.question}</strong> <br/>{cardContent.answer}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
