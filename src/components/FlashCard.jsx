@@ -67,11 +67,11 @@ const FlashCard = ({cardContent, handleOnDrop}) => {
         sx={cardStyle}>
         <CardContent sx={{display: frontElement, flexDirection: 'column'}}>
           <button onClick={handleDialog}>Delete</button>
-          <Typography variant="body1" fontSize={16}>{cardContent.front}</Typography>
+          <Typography variant="body1" fontSize={16}>{cardContent.question}</Typography>
           <button onClick={ChangeFlipped}>.</button>
         </CardContent>
         <CardContent sx={{display: backElement, flexDirection: 'column'}}>
-          <Typography variant="body1" fontSize={14}>{cardContent.front}</Typography>
+          <Typography variant="body1" fontSize={14}>{cardContent.answer}</Typography>
           <button onClick={ChangeFlipped}>.</button>
         </CardContent>
       </Card>

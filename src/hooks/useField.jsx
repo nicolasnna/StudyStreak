@@ -1,7 +1,7 @@
 import { useState } from "react"
 
-const useField = () => {
-  const [value, setValue] = useState("")
+const useField = (initialState) => {
+  const [value, setValue] = useState(initialState)
 
   const changeValue = (e) => {
     e.preventDefault()

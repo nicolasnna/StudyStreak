@@ -1,11 +1,15 @@
-import { Box, Button, Paper, Typography } from "@mui/material"
+import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { FontSize, PaddingSize } from "../utils/constants"
+import { CardKeys, FontSize, PaddingSize } from "../utils/constants"
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import ArticleIcon from '@mui/icons-material/Article';
 import { setCards } from "../redux/cardReducer"
 import { setCardLocal } from "../utils/localStorage"
+import { useState } from "react"
 
 const JsonManager = () => {
+  const [ dataUpload, setDataUpload ] = useState([])
+  const [ showUpload, setShowUpload ] = useState(false)
   const flashCards = useSelector(state => state.card)
   const dispatch = useDispatch()
 
@@ -43,10 +47,10 @@ const JsonManager = () => {
           const json = JSON.parse(e.target.result)
           if ( Array.isArray(json) && json.every(obj => {
             const keys = Object.keys(obj)
-            return keys.length === 3 && keys.includes('id') && keys.includes('front') && keys.includes('back') 
+            return keys.length === CardKeys.length && CardKeys.every(k => keys.includes(k))
             })){
-            dispatch(setCards(json))
-            setCardLocal(json)
+            setDataUpload(json)
+            setShowUpload(true)
           } else {
             console.log("El json no tiene la estructura correcta")
           }
@@ -56,6 +60,11 @@ const JsonManager = () => {
       }
       reader.readAsText(file)
     }
+  }
+
+  const handleSaveCards = () => {
+    dispatch(setCards(dataUpload))
+    setCardLocal(dataUpload)
   }
 
   return (
@@ -68,26 +77,45 @@ const JsonManager = () => {
       }}  
     >
       <Typography variant="h2" fontSize={FontSize.BIG} align="center">
-        Exporta/Importa tus flashcards
+        Exporta/Importa tus tarjetas
       </Typography>
-      <Button variant="contained" onClick={handleExportCards}>
-        Exportar
-      </Button>
-      <Button
-        component="label"
-        role={undefined}
-        variant="contained"
-        tabIndex={-1}
-        startIcon={<CloudUploadIcon />}
-      >
-        Importar
-        <input
-          accept=".json"
-          style={{ display: 'none' }}
-          type="file"
-          onChange={handleImportCards}
-        />
-      </Button>
+      <Stack flexDirection={"row"} gap={2} justifyContent={'center'} alignItems={'center'}>
+        <Button variant="contained" onClick={handleExportCards}>
+          Exportar
+        </Button>
+        <Typography fontSize={FontSize.NORMAL}>O</Typography>
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+        >
+          Importar
+          <input
+            accept=".json"
+            style={{ display: 'none' }}
+            type="file"
+            onChange={handleImportCards}
+          />
+        </Button>
+      </Stack>
+      {showUpload && <Box>
+        <Typography align="center" fontSize={FontSize.HIGH}>Se ha leído {dataUpload.length} tarjetas <br/> ¿Desea importarlos?</Typography>
+        <Stack flexDirection="row" alignItems="center" justifyContent='center'>
+          <Button width={20} variant="contained" onClick={handleSaveCards}>Guardar</Button>
+        </Stack>
+        <List dense sx={{ width: '100%', maxHeight: 200, overflow: 'auto'}}>
+          {dataUpload.map((c) => (
+            <ListItem key={c.id} divider>
+              <ListItemIcon>
+                <ArticleIcon edge="start" disableRipple/>
+              </ListItemIcon>
+              <ListItemText primary={c.front}/>
+            </ListItem>
+          ))}
+        </List>
+      </Box>}
     </Box>
   )
 }
