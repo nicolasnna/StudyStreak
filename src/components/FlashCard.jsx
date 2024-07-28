@@ -1,126 +1,117 @@
-import { Alert, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Typography } from "@mui/material"
-import PropTypes from 'prop-types'
-import { useState } from "react"
-import { useDispatch } from "react-redux"
-import { deleteCardById } from "../reducer/cardReducer"
-import useNotification from "../hooks/useNotification"
-import { createPortal } from "react-dom"
+import {
+  Card,
+  CardContent,
+  DialogContentText,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteCardById } from "../reducer/cardReducer";
+import { infoNotification } from "../reducer/notificationReducer";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FlipIcon from "@mui/icons-material/Flip";
+import ModalDialog from "./ModalDialog";
 
 const cardStyle = {
-  width: "max-content",
-  maxWidth: "250px",
-  minHeight: "150px",
-  height: "max-content",
+  width: "300px",
+  height: "200px",
   padding: 1,
-}
+  display: "flex",
+};
 
-const FlashCard = ({cardContent, handleOnDrop}) => {
-  const [flipped, setFlipped] = useState(false)
-  const [hidden, setHidden] = useState(false)
-  const [openDialog, setOpenDialog] = useState(false)
-  const dispatch = useDispatch()
-  const notification = useNotification()
+const FlashCard = ({
+  cardContent,
+  manageMode,
+  handleNotification,
+}) => {
+  const [flipped, setFlipped] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const dispatch = useDispatch();
 
-  const frontElement = flipped ? 'none' : 'flex'
-  const backElement = flipped ? 'flex' : 'none'
+  const ChangeFlipped = () => setFlipped(!flipped);
+  const handleDialog = () => setOpenDialog(true);
+  const closeDialog = () => setOpenDialog(false);
 
-  const ChangeFlipped = () => {
-    setFlipped(!flipped)
-  }
+  const deleteFlashCard = () => {
+    closeDialog();
+    dispatch(infoNotification("Se ha eliminado la tarjeta correctamente"));
+    handleNotification();
+    dispatch(deleteCardById(cardContent.id));
+  };
 
-  const deleteFlashCard = () => {  
-    closeDialog()
-    notification.handleOpen()
-    setHidden(true)
-    setTimeout(() => {
-      dispatch(deleteCardById(cardContent.id))
-    },2000)
-  }
-
-  const handleDialog = () => {
-    setOpenDialog(true)
-
-  }
-  const closeDialog = () => {
-    setOpenDialog(false)
-  }
-
-  const handleOnDrag = (e) => {
-    e.dataTransfer.setData('flashCardSelect', e.target.id)
-    e.dataTransfer.effectAllowed = "move"
-  }
-
-  const handleDragOver = (e) => {
-    e.preventDefault()
-  }
-
-  return ( 
+  return (
     <>
-      <Card 
-        id={cardContent.id} 
-        hidden={hidden}
-        component="div" 
-        draggable 
-        onDragStart={handleOnDrag}
-        onDragOver={handleDragOver}
-        onDrop={handleOnDrop}
-        sx={cardStyle}>
-        <CardContent sx={{display: frontElement, flexDirection: 'column'}}>
-          <button onClick={handleDialog}>Delete</button>
-          <Typography variant="body1" fontSize={16}>{cardContent.question}</Typography>
-          <button onClick={ChangeFlipped}>.</button>
-        </CardContent>
-        <CardContent sx={{display: backElement, flexDirection: 'column'}}>
-          <Typography variant="body1" fontSize={14}>{cardContent.answer}</Typography>
-          <button onClick={ChangeFlipped}>.</button>
+      <Card
+        component={Paper}
+        id={cardContent.id}
+        sx={cardStyle}
+      >
+        <CardContent
+          sx={{
+            flexDirection: "column",
+            paddingTop: 0,
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          {manageMode && (
+            <Stack
+              flexDirection={"row"}
+              justifyContent="end"
+              alignItems="self-end"
+            >
+              <IconButton onClick={handleDialog} aria-label="delete-button">
+                <DeleteIcon />
+              </IconButton>
+              <IconButton onClick={ChangeFlipped} aria-label="flip-button">
+                <FlipIcon />
+              </IconButton>
+            </Stack>
+          )}
+          {!flipped && (
+            <Stack>
+              <Typography variant="body1" fontSize={16}>
+                {cardContent.question}
+              </Typography>
+            </Stack>
+          )}
+          {flipped && (
+            <Stack>
+              <Typography variant="body1" fontSize={14}>
+                {cardContent.answer}
+              </Typography>
+            </Stack>
+          )}
         </CardContent>
       </Card>
-      {createPortal(
-        <Snackbar
-          open={notification.value}
-          autoHideDuration={3000}
-          onClose={notification.handleClose}
-          action={notification.action}
-        >
-          <Alert
-            onClose={notification.handleClose}
-            severity="success"
-            color="info"
-            sx={{width:"100%"}}
-          >
-            Se ha eliminado una flash card
-          </Alert>
-        </Snackbar>,
-        document.body
-      )}
-      <Dialog
-        open={openDialog}
-        onClose={closeDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+
+      <ModalDialog
+        title="Eliminar tarjeta?"
+        handleOpen={openDialog}
+        handleClose={closeDialog}
+        handleAcept={deleteFlashCard}
+        focusInverseButton={true}
       >
-        <DialogTitle>
-          {"Eliminar Flash Card?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Desea eliminar la flash card: <br/><strong>{cardContent.question}</strong> <br/>{cardContent.answer}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog} variant="contained">Cancelar</Button>
-          <Button onClick={deleteFlashCard} variant="outlined">
-            Aceptar
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <DialogContentText>
+          Desea eliminar la tarjeta: <br />
+          <strong>{cardContent.question}</strong> <br />
+          {cardContent.answer}
+        </DialogContentText>
+      </ModalDialog>
     </>
-  )
-}
+  );
+};
 
 FlashCard.propTypes = {
   cardContent: PropTypes.object,
-  handleOnDrop: PropTypes.func
-}
+  manageMode: PropTypes.bool,
+  handleNotification: PropTypes.func,
+};
 
-export default FlashCard
+export default FlashCard;

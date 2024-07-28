@@ -1,9 +1,11 @@
 import { Alert, IconButton, Snackbar } from "@mui/material"
 import { Fragment, useState } from "react"
 import CloseIcon from '@mui/icons-material/Close';
+import { useSelector } from "react-redux";
 
 const useNotification = () => {
   const [value, setValue] = useState(false)
+  const state = useSelector(state => state.notification)
 
   const handleOpen = () => {
     setValue(true)
@@ -30,20 +32,21 @@ const useNotification = () => {
     </Fragment>
   )
 
-  const component = ({severity = 'success', label = ''}) => {
+  const component = () => {
     return (
       <Snackbar
         open={value}
-        autoHideDuration={3000}
+        autoHideDuration={3500}
         onClose={handleClose}
         action={action}
       >
         <Alert
           onClose={handleClose}
-          severity={severity}
+          severity={state.severity}
+          color={state.color}
           sx={{width:"100%"}}
         >
-          {label}
+          {state.label}
         </Alert>
       </Snackbar>
     )

@@ -28,3 +28,17 @@ export const getCardLocal = () => {
   }
   return []
 }
+
+export const setCategoryLocal = (categories) => {
+  localStorage.setItem('categoryCards', JSON.stringify(categories))
+}
+
+export const getCategoryLocal = () => {
+  const categoryLocal = localStorage.getItem('categoryCards')
+  if (categoryLocal) {
+    const saved = JSON.parse(categoryLocal)
+    const savedValidated = Array.isArray(saved) ? saved : [saved]
+    return savedValidated
+  }
+  return []
+}

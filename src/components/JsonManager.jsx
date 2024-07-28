@@ -6,8 +6,10 @@ import ArticleIcon from '@mui/icons-material/Article';
 import { setCards } from "../reducer/cardReducer"
 import { setCardLocal } from "../utils/localStorage"
 import { useState } from "react"
+import PropTypes from "prop-types";
+import { errorNotification, successNotification } from "../reducer/notificationReducer";
 
-const JsonManager = () => {
+const JsonManager = ({ handleNotification }) => {
   const [ dataUpload, setDataUpload ] = useState([])
   const [ showUpload, setShowUpload ] = useState(false)
   const flashCards = useSelector(state => state.card)
@@ -52,11 +54,15 @@ const JsonManager = () => {
             setDataUpload(json)
             setShowUpload(true)
           } else {
-            console.log("El json no tiene la estructura correcta")
+            dispatch(errorNotification("El json no tiene la estructura correcta"))
+            handleNotification()
+            //console.log("El json no tiene la estructura correcta")
           }
         } catch (error) {
-          console.log("El archivo no es un JSON valido")  
-        }
+          dispatch(errorNotification("El archivo no es un JSON valido"))
+          handleNotification()
+          //console.log("El archivo no es un JSON valido")  
+        } 
       }
       reader.readAsText(file)
     }
@@ -65,6 +71,10 @@ const JsonManager = () => {
   const handleSaveCards = () => {
     dispatch(setCards(dataUpload))
     setCardLocal(dataUpload)
+    setShowUpload(false)
+    setDataUpload([])
+    dispatch(successNotification("Se ha subido las tarjetas corectamente"))
+    handleNotification()
   }
 
   return (
@@ -111,13 +121,17 @@ const JsonManager = () => {
               <ListItemIcon>
                 <ArticleIcon edge="start" disableRipple/>
               </ListItemIcon>
-              <ListItemText primary={c.front}/>
+              <ListItemText primary={c.question}/>
             </ListItem>
           ))}
         </List>
       </Box>}
     </Box>
   )
+}
+
+JsonManager.propTypes = {
+  handleNotification: PropTypes.func
 }
 
 export default JsonManager

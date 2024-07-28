@@ -1,27 +1,27 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
 import useField from "../hooks/useField"
 import { useDispatch, useSelector } from "react-redux"
 import { createCard } from "../reducer/cardReducer"
-import useNotification from "../hooks/useNotification"
 import { FontSize, PaddingSize } from "../utils/constants"
 import { useState } from "react"
 import { createCategory } from "../reducer/categoryReducer"
+import { setCategoryLocal } from "../utils/localStorage"
+import PropTypes from "prop-types";
+import { successNotification } from "../reducer/notificationReducer"
+import ModalDialog from "./ModalDialog"
 
 const fieldStyle = {
   width: "400px",
 }
 
-const CardForm = () => {
+const CardForm = ({ handleNotification }) => {
   const questionField = useField('')
   const answerField = useField('')
   const difficultField = useField('')
   const tagField = useField('')
-  const notifyCreateCard = useNotification()
-  const notifyCreateCategory = useNotification()
   const dispatch = useDispatch()
   const categories = useSelector(state => state.category)
   const [openDialog, setOpenDialog ] = useState(false)
-  const [newCategory, setNewCategory ] = useState('')
 
   const cleanField = () => {
     questionField.clean()
@@ -34,22 +34,27 @@ const CardForm = () => {
     event.preventDefault()
     const card = {
       question: questionField.value,
-      answer: answerField.value
+      answer: answerField.value,
+      difficulty: difficultField.value,
+      tags: tagField.value || []
     }
     dispatch(createCard(card))
     cleanField()
-    notifyCreateCard.handleOpen()
+    dispatch(successNotification("Se ha creado la tarjeta correctamente"))
+    handleNotification()
   }
 
   const handleSubmitDialog = (e) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const formJson = Object.fromEntries(formData.entries())
-    const categoryText = formJson.category
-    setNewCategory(categoryText)
-    dispatch(createCategory(categoryText))
+    const newCategory = formJson.category
+    const listCategory = [...categories, newCategory]
+    setCategoryLocal(listCategory)
+    dispatch(createCategory(newCategory))
     closeDialog()
-    notifyCreateCategory.handleOpen()
+    dispatch(successNotification(`Se ha creado la categoria "${newCategory}"`))
+    handleNotification()
   } 
 
   const closeDialog = () => {setOpenDialog(false)}
@@ -66,11 +71,8 @@ const CardForm = () => {
         gap: 2,
         padding: PaddingSize.NORMAL
       }}
-      >
-      <notifyCreateCard.component severity="success" label="Se ha creado la tarjeta correctamente"/>
-      <notifyCreateCategory.component severity="success" label={`Se ha creado la categoria "${newCategory}"`}/>
-      <Typography variant="h2" fontSize={FontSize.BIG} align="center">Crear nueva FlashCard</Typography>
-
+    >
+      <Typography variant="h2" fontSize={FontSize.BIG} align="center">Crear una nueva tarjeta</Typography>
       <Box 
         component="form" 
         flexDirection={"column"} 
@@ -144,34 +146,30 @@ const CardForm = () => {
         </Box>
       </Box>
 
-      <Dialog
-        open={openDialog}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmitDialog
-        }}
+      <ModalDialog
+        handleOpen={openDialog}
+        handleClose={closeDialog}
+        component="form"
+        handleSubmit={handleSubmitDialog}
+        title="Crear Categoría"
       >
-        <DialogTitle>Crear Categoría</DialogTitle>
-        <DialogContent>
-          <TextField
-            required
-            id="category"
-            name="category"
-            label="Categoría"
-            type="text"
-            margin="dense"
-            size="small"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialog} variant="outlined">Cancelar</Button>
-          <Button type="submit" variant="contained">Guardar</Button>
-      </DialogActions>
-      </Dialog>
+        <TextField
+          required
+          id="category"
+          name="category"
+          label="Categoría"
+          type="text"
+          margin="dense"
+          size="small"
+        />
+      </ModalDialog>
 
     </Box>
   )
+}
+
+CardForm.propTypes = {
+  handleNotification: PropTypes.func
 }
 
 export default CardForm
