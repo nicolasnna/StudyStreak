@@ -7,20 +7,22 @@ import { setCategories } from "./reducer/categoryReducer"
 import { Route, Routes } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import ManageCards from "./pages/ManageCards/ManageCards"
+import GameCard from "./pages/GameCard/GameCard"
 
 function App() {
   const dispatch = useDispatch()
-
+  
   useEffect(() => {
     dispatch(setCards(getCardLocal()))
     dispatch(setCategories(getCategoryLocal()))
   }, [dispatch])
-
+  
   return (
     <Container >
       <Navbar/>
       <Routes>
         <Route path="/cards" element={<ManageCards/>}/>
+        <Route path="/game" element={<GameCard/>}/>
       </Routes>
     </Container>
   )

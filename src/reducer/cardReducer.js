@@ -38,10 +38,13 @@ const cardSlice = createSlice({
     deleteCard(state, action) {
       return state.filter((c) => c.id !== action.payload);
     },
+    updateCard(state, action) {
+      return state.map(c => c.id === action.payload.id ? action.payload : c)
+    },
   },
 });
 
-export const { setCards, addCard, deleteCard } = cardSlice.actions;
+export const { setCards, addCard, deleteCard, updateCard } = cardSlice.actions;
 
 export const createCard = (card) => {
   return async (dispatch) => {
@@ -63,5 +66,22 @@ export const deleteCardById = (id) => {
     deleteCardLocal(id);
   };
 };
+
+export const modifyCardById = (actualContent, newContent) => {
+  return async (dispatch) => {
+    const date = new Date()
+    const cardModify = {
+      id: actualContent.id,
+      answer: newContent.answer || actualContent.answer,
+      question: newContent.question || actualContent.question,
+      comments: newContent.comments || actualContent.comments,
+      tags: newContent.tags || actualContent.tags,
+      difficulty: newContent.difficulty || actualContent.difficulty,
+      updated_at: date.toLocaleString()
+    }
+    console.log(cardModify)
+    dispatch(updateCard(cardModify))
+  }
+}
 
 export default cardSlice.reducer;

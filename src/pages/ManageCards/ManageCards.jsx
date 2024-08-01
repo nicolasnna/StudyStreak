@@ -43,7 +43,7 @@ const ManageCards = () => {
           flexWrap='wrap'
           gap={3}
           justifyContent={'center'}
-          alignItem='center'
+          alignItems='center'
           marginTop='2em'
         >
           {cards.map(c => 

@@ -1,5 +1,6 @@
 export const FontSize = Object.freeze({
   TITLE: '3em',
+  SUBTITLE: '2.3em',
   BIG: '1.7em',
   HIGH: '1.3em',
   NORMAL: '1em',
