@@ -29,7 +29,7 @@ const cardStyle = {
   padding: 1,
   display: "flex",
   flexDirection: 'column',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
 };
 
 const FlashCard = ({
@@ -53,6 +53,11 @@ const FlashCard = ({
   const closeDialog = () => setOpenDialog(false);
   const handleDialogUpdate = () => setOpenDialogUpdate(true)
   const closeDialogUpdate = () => setOpenDialogUpdate(false)
+  const flipWithClick = () => {
+    if (!manageMode) {
+      setFlipped(!flipped)
+    }
+  }
 
   const deleteFlashCard = () => {
     closeDialog();
@@ -83,6 +88,7 @@ const FlashCard = ({
         component={Paper}
         id={cardContent.id}
         sx={cardStyle}
+        onClick={flipWithClick}
       >
         {manageMode && (
             <Stack
@@ -110,18 +116,29 @@ const FlashCard = ({
             paddingBottom: 0,
             flexGrow: 1,
             boxSizing: 'border-box',
+            overflow: 'auto',
           }}
         >
           {!flipped && (
             <Stack>
-              <Typography variant="body1" fontSize={16}>
+              <Typography 
+                variant="body1" 
+                fontSize={16}
+                sx={{
+                  wordWrap: 'break-word'
+                }}>
                 {cardContent.question}
               </Typography>
             </Stack>
           )}
           {flipped && (
             <Stack>
-              <Typography variant="body1" fontSize={14}>
+              <Typography 
+                variant="body1" 
+                fontSize={14} 
+                sx={{
+                  wordWrap: 'break-word'
+                }}>
                 {cardContent.answer}
               </Typography>
             </Stack>

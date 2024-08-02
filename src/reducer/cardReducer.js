@@ -41,10 +41,13 @@ const cardSlice = createSlice({
     updateCard(state, action) {
       return state.map(c => c.id === action.payload.id ? action.payload : c)
     },
+    setFrequency(state, action) {
+      return state.map(c => c.id === action.payload.id ? {...c, revision_frequency: action.payload.frequency} : c)
+    }
   },
 });
 
-export const { setCards, addCard, deleteCard, updateCard } = cardSlice.actions;
+export const { setCards, addCard, deleteCard, updateCard, setFrequency } = cardSlice.actions;
 
 export const createCard = (card) => {
   return async (dispatch) => {
@@ -79,8 +82,17 @@ export const modifyCardById = (actualContent, newContent) => {
       difficulty: newContent.difficulty || actualContent.difficulty,
       updated_at: date.toLocaleString()
     }
-    console.log(cardModify)
     dispatch(updateCard(cardModify))
+  }
+}
+
+export const changeFrequencyById = (id, newFrequency) => {
+  return async (dispatch) => {
+    const command = {
+      id: id,
+      frequency: newFrequency
+    }
+    dispatch(setFrequency(command))
   }
 }
 
