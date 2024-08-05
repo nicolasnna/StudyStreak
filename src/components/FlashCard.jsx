@@ -35,7 +35,8 @@ const cardStyle = {
 const FlashCard = ({
   cardContent,
   manageMode = false,
-  handleNotification,
+  disableFlip = false,
+  handleNotification = () => {},
 }) => {
   const [flipped, setFlipped] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
@@ -54,7 +55,7 @@ const FlashCard = ({
   const handleDialogUpdate = () => setOpenDialogUpdate(true)
   const closeDialogUpdate = () => setOpenDialogUpdate(false)
   const flipWithClick = () => {
-    if (!manageMode) {
+    if (!manageMode && !disableFlip) {
       setFlipped(!flipped)
     }
   }
@@ -259,6 +260,7 @@ const FlashCard = ({
 FlashCard.propTypes = {
   cardContent: PropTypes.object,
   manageMode: PropTypes.bool,
+  disableFlip: PropTypes.bool,
   handleNotification: PropTypes.func,
 };
 

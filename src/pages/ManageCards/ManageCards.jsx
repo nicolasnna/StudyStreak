@@ -18,7 +18,10 @@ const ManageCards = () => {
   return (
     <Box sx={manageCardsStyle}>
       <notification.component/>
-      <Header Text={"Crea, añade y revisa tus tarjetas"}/>
+      <Header 
+        Title={"Gestiona tus Tarjetas de Estudio"}
+        SubTitle=" Organiza, personaliza y mantén tu contenido actualizado."
+      />
       <Stack 
         flexDirection={'row'}
         alignItems='center'
@@ -46,6 +49,9 @@ const ManageCards = () => {
           alignItems='center'
           marginTop='2em'
         >
+          {cards.length === 0 && <Typography fontSize={FontSize.NORMAL}>
+            Añade tarjetas para poder visualizarlas aquí.
+          </Typography>}
           {cards.map(c => 
             <FlashCard 
               key={c.id} 

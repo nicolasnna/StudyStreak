@@ -21,8 +21,8 @@ function App() {
     <Container >
       <Navbar/>
       <Routes>
-        <Route path="/cards" element={<ManageCards/>}/>
-        <Route path="/game" element={<GameCard/>}/>
+        <Route path="/gestionar-tarjetas" element={<ManageCards/>}/>
+        <Route path="/modos-de-juego/*" element={<GameCard/>}/>
       </Routes>
     </Container>
   )

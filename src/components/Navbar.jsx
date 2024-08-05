@@ -25,8 +25,8 @@ const optionStyle = {
 
 const navbarOption = [
   { name: "Home", route: "/" },
-  { name: "Tarjetas", route: "/cards" },
-  { name: "Jugar", route: "/game" }
+  { name: "Gestionar tarjetas", route: "/gestionar-tarjetas" },
+  { name: "Modos de juego", route: "/modos-de-juego" }
 ];
 
 const Navbar = () => {
