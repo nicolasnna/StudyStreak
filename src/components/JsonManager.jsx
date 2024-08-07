@@ -1,15 +1,14 @@
-import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material"
-import { useDispatch, useSelector } from "react-redux"
-import { CardKeys, FontSize, PaddingSize } from "../utils/constants"
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import ArticleIcon from '@mui/icons-material/Article';
-import { setCards } from "../reducer/cardReducer"
-import { setCardLocal } from "../utils/localStorage"
-import { useState } from "react"
-import PropTypes from "prop-types";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCards } from "../reducer/cardReducer";
 import { errorNotification, successNotification } from "../reducer/notificationReducer";
+import { CardKeys } from "../utils/constants";
+import { setCardLocal } from "../utils/localStorage";
 
-const JsonManager = ({ handleNotification }) => {
+const JsonManager = () => {
   const [ dataUpload, setDataUpload ] = useState([])
   const [ showUpload, setShowUpload ] = useState(false)
   const flashCards = useSelector(state => state.card)
@@ -55,12 +54,10 @@ const JsonManager = ({ handleNotification }) => {
             setShowUpload(true)
           } else {
             dispatch(errorNotification("El json no tiene la estructura correcta"))
-            handleNotification()
             //console.log("El json no tiene la estructura correcta")
           }
         } catch (error) {
           dispatch(errorNotification("El archivo no es un JSON valido"))
-          handleNotification()
           //console.log("El archivo no es un JSON valido")  
         } 
       }
@@ -74,7 +71,6 @@ const JsonManager = ({ handleNotification }) => {
     setShowUpload(false)
     setDataUpload([])
     dispatch(successNotification("Se ha subido las tarjetas corectamente"))
-    handleNotification()
   }
 
   return (
@@ -83,17 +79,17 @@ const JsonManager = ({ handleNotification }) => {
         display: "flex",
         flexDirection: "column",
         gap: 2,
-        padding: PaddingSize.NORMAL
+        padding: 1.5
       }}  
     >
-      <Typography variant="h2" fontSize={FontSize.BIG} align="center">
+      <Typography variant="h2" align="center">
         Exporta/Importa tus tarjetas
       </Typography>
       <Stack flexDirection={"row"} gap={2} justifyContent={'center'} alignItems={'center'}>
         <Button variant="contained" onClick={handleExportCards}>
           Exportar
         </Button>
-        <Typography fontSize={FontSize.NORMAL}>O</Typography>
+        <Typography variant="body2">O</Typography>
         <Button
           component="label"
           role={undefined}
@@ -111,7 +107,7 @@ const JsonManager = ({ handleNotification }) => {
         </Button>
       </Stack>
       {showUpload && <Box>
-        <Typography align="center" fontSize={FontSize.HIGH}>Se ha leído {dataUpload.length} tarjetas <br/> ¿Desea importarlos?</Typography>
+        <Typography align="center" variant="h3">Se ha leído {dataUpload.length} tarjetas <br/> ¿Desea importarlos?</Typography>
         <Stack flexDirection="row" alignItems="center" justifyContent='center'>
           <Button width={20} variant="contained" onClick={handleSaveCards}>Guardar</Button>
         </Stack>
@@ -130,8 +126,5 @@ const JsonManager = ({ handleNotification }) => {
   )
 }
 
-JsonManager.propTypes = {
-  handleNotification: PropTypes.func
-}
 
 export default JsonManager

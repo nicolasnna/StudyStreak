@@ -1,5 +1,4 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { FontSize, PaddingSize } from "../utils/constants";
 import { Link } from "react-router-dom";
 
 const navbarStyle = {
@@ -12,7 +11,7 @@ const navbarStyle = {
 };
 
 const optionStyle = {
-  padding: PaddingSize.SMALL,
+  padding: 1,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -36,7 +35,7 @@ const Navbar = () => {
       {navbarOption.map(o => (
         <Link style={{textDecoration: 'none'}} key={o.name} to={o.route}> 
           <Box sx={optionStyle}>
-            <Typography fontSize={FontSize.HIGH}>{o.name}</Typography>
+            <Typography variant="h2">{o.name}</Typography>
           </Box>
         </Link>
       ))}

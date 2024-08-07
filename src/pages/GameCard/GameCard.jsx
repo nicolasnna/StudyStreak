@@ -1,7 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import Header from "../../components/Header";
 import BasicMode from "./components/BasicMode";
-import useNotification from "../../hooks/useNotification";
 import { Link, Route, Routes } from "react-router-dom";
 import { FontSize } from "../../utils/constants";
 import MultipleSelectionMode from "./components/MultipleSelectionMode";
@@ -12,11 +11,8 @@ const buttonRoutes = [
 ]
 
 const GameCard = () => {
-  const notification = useNotification()
-
   return (
     <Box marginTop={'1em'}>
-      <notification.component/>
       <Header 
         Title={"Explora tu conocimiento"}
         SubTitle="Selecciona un modo de juego para desafiar tus habilidades."
@@ -39,11 +35,11 @@ const GameCard = () => {
       <Routes>
         <Route 
           path="/basico" 
-          element={<BasicMode handleNotification={notification.handleOpen} />}
+          element={<BasicMode />}
         />
         <Route 
           path="/seleccion-multiple" 
-          element={<MultipleSelectionMode handleNotification={notification.handleOpen}/>}
+          element={<MultipleSelectionMode />}
         />
       </Routes>
     </Box>

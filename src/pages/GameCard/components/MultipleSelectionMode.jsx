@@ -1,6 +1,5 @@
 import { Box, Button, Card, CardContent, Stack, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
-import { FontSize } from '../../../utils/constants'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import WaitCard from './WaitCard'
@@ -8,10 +7,10 @@ import { FisherYates, sortCards } from '../../../utils/commonFunction'
 import VisualizerCard from './VisualizerCard'
 import { setCardLocal } from '../../../utils/localStorage'
 import { changeFrequencyById } from '../../../reducer/cardReducer'
-import { infoNotification, successNotification } from '../../../reducer/notificationReducer'
+import { errorNotification, infoNotification, successNotification } from '../../../reducer/notificationReducer'
 import CardControl from './CardControl'
 
-const MultipleSelectionMode = ({handleNotification}) => {
+const MultipleSelectionMode = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [expandedCards, setExpandedCards] = useState([])
   const [startGame, setStartGame] = useState(false)
@@ -60,17 +59,14 @@ const MultipleSelectionMode = ({handleNotification}) => {
       case 1:
         dispatch(changeFrequencyById(expandedCards[currentIndex].id, 1))
         dispatch(successNotification("Se ha incrementado la frecuencia de aparición de la tarjeta"))
-        handleNotification()
         break
       case 0:
         dispatch(changeFrequencyById(expandedCards[currentIndex].id, 0))
         dispatch(infoNotification("Volviendo a la frecuencia normal"))
-        handleNotification()
         break
       case -1:
         dispatch(changeFrequencyById(expandedCards[currentIndex].id, -1))
         dispatch(successNotification("Se ha disminuido la frecuencia de aparición de la tarjeta"))
-        handleNotification()
         break
       default:
         console.error("Error to specify change Frequency in MultipleSelectionMode.jsx")
@@ -85,8 +81,10 @@ const MultipleSelectionMode = ({handleNotification}) => {
     if (selectId === expandedCards[currentIndex].id) {
       arrayColor[selectIndex] = "rgb(0,220,0,0.5)"
       setCorrectIsSelected(true)
+      dispatch(successNotification("Se ha marcado la alternativa correcta"))
     } else {
       arrayColor[selectIndex] = "rgb(220,0,0,0.5)"
+      dispatch(errorNotification("Se ha marcado la alternativa incorrecta"))
     }
     setColorOption(arrayColor)
   } 
@@ -124,9 +122,9 @@ const MultipleSelectionMode = ({handleNotification}) => {
       padding={3} 
       gap={3}
     >
-      <Typography variant="h3" fontSize={FontSize.SUBTITLE}>Modo selección multiple</Typography>
+      <Typography variant="h2" >Modo selección multiple</Typography>
       {!startGame && <Button variant="contained" onClick={handleStart}>
-        <Typography fontSize={FontSize.BIG} padding={1}>Empezar</Typography>
+        <Typography variant="h3" padding={1}>Empezar</Typography>
       </Button>}
 
       {(!expandedCards[currentIndex] && startGame) && <WaitCard Body1="Barajando tarjetas..." Body2=""/>}
@@ -135,7 +133,6 @@ const MultipleSelectionMode = ({handleNotification}) => {
         <Typography 
           variant="body1" 
           textAlign={'center'} 
-          fontSize={FontSize.NORMAL}
         >
           Usa las flechas para ajustar la frecuencia de aparición de la tarjeta.
         </Typography>
@@ -158,9 +155,8 @@ const MultipleSelectionMode = ({handleNotification}) => {
 
         <Box>
           <Typography 
-            variant="h4" 
+            variant="h3" 
             textAlign={'center'} 
-            fontSize={FontSize.HIGH}
           >
             <strong>Elige la opción correcta</strong>
           </Typography>
@@ -184,7 +180,7 @@ const MultipleSelectionMode = ({handleNotification}) => {
             <CardContent 
               padding={1}
             >
-              <Typography fontSize={FontSize.NORMAL}>
+              <Typography variant="body1">
                 {c.answer}
               </Typography>
             </CardContent>

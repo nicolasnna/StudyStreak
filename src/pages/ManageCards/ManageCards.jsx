@@ -1,11 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material"
-import Header from "../../components/Header"
-import CardForm from "../../components/CardForm"
-import FlashCard from "../../components/FlashCard"
-import JsonManager from "../../components/JsonManager"
-import { FontSize, PaddingSize } from "../../utils/constants"
 import { useSelector } from "react-redux"
-import useNotification from "../../hooks/useNotification"
+import CardForm from "../../components/CardForm"
+import FlashCard from "../../components/FlashCard/FlashCard"
+import Header from "../../components/Header"
+import JsonManager from "../../components/JsonManager"
 
 const manageCardsStyle = {
   marginTop: '2em'
@@ -13,11 +11,9 @@ const manageCardsStyle = {
 
 const ManageCards = () => {
   const cards = useSelector(state => state.card)
-  const notification = useNotification()
 
   return (
     <Box sx={manageCardsStyle}>
-      <notification.component/>
       <Header 
         Title={"Gestiona tus Tarjetas de Estudio"}
         SubTitle=" Organiza, personaliza y mantén tu contenido actualizado."
@@ -27,18 +23,18 @@ const ManageCards = () => {
         alignItems='center'
         justifyContent='center'
         gap={6}
-        padding={PaddingSize.NORMAL}
+        padding={1}
       >
-        <CardForm handleNotification={notification.handleOpen}/>
-        <JsonManager handleNotification={notification.handleOpen}/>
+        <CardForm />
+        <JsonManager/>
       </Stack>
       <Stack
         flexDirection={'column'}
         alignItems={'center'}
         justifyContent='center'
-        padding={PaddingSize.NORMAL}
+        padding={1}
       >
-        <Typography variant="h2" fontSize={FontSize.BIG}>
+        <Typography variant="h2">
           Tarjetas creadas
         </Typography>
         <Stack
@@ -49,7 +45,7 @@ const ManageCards = () => {
           alignItems='center'
           marginTop='2em'
         >
-          {cards.length === 0 && <Typography fontSize={FontSize.NORMAL}>
+          {cards.length === 0 && <Typography variant="body1">
             Añade tarjetas para poder visualizarlas aquí.
           </Typography>}
           {cards.map(c => 
@@ -57,7 +53,6 @@ const ManageCards = () => {
               key={c.id} 
               cardContent={c} 
               manageMode={true}
-              handleNotification={notification.handleOpen}
             />
           )}
         </Stack>

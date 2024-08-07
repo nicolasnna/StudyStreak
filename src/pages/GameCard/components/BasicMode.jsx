@@ -1,17 +1,15 @@
 import { Box, Button, Stack, Typography } from "@mui/material"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { FontSize } from "../../../utils/constants"
-import PropTypes from 'prop-types'
-import { infoNotification, successNotification } from "../../../reducer/notificationReducer"
 import { changeFrequencyById } from "../../../reducer/cardReducer"
+import { infoNotification, successNotification } from "../../../reducer/notificationReducer"
 import { sortCards } from "../../../utils/commonFunction"
 import { setCardLocal } from "../../../utils/localStorage"
+import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
-import CardControl from "./CardControl"
 
-const BasicMode = ({ handleNotification = () => {}}) => {
+const BasicMode = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [expandedCards, setExpandedCards] = useState([])
   const [startGame, setStartGame] = useState(false)
@@ -50,17 +48,14 @@ const BasicMode = ({ handleNotification = () => {}}) => {
       case 1:
         dispatch(changeFrequencyById(expandedCards[currentIndex].id, 1))
         dispatch(successNotification("Se ha incrementado la frecuencia de aparición de la tarjeta"))
-        handleNotification()
         break
       case 0:
         dispatch(changeFrequencyById(expandedCards[currentIndex].id, 0))
         dispatch(infoNotification("Volviendo a la frecuencia normal"))
-        handleNotification()
         break
       case -1:
         dispatch(changeFrequencyById(expandedCards[currentIndex].id, -1))
         dispatch(successNotification("Se ha disminuido la frecuencia de aparición de la tarjeta"))
-        handleNotification()
         break
       default:
         console.error("Error to specify change Frequency in ModeBasicGame.jsx")
@@ -81,9 +76,9 @@ const BasicMode = ({ handleNotification = () => {}}) => {
 
   return (
     <Box display="flex" flexDirection={"column"} alignItems={"center"} justifyContent={"center"} padding={3} gap={3}>
-      <Typography variant="h3" fontSize={FontSize.SUBTITLE}>Modo revisión básica</Typography>
+      <Typography variant="h2">Modo revisión básica</Typography>
       {!startGame && <Button variant="contained" onClick={handleStart}>
-        <Typography fontSize={FontSize.BIG} padding={1}>Empezar</Typography>
+        <Typography variant="h3" padding={1}>Empezar</Typography>
       </Button>}
 
       {(!expandedCards[currentIndex] && startGame) && <WaitCard Body1="Barajando tarjetas..." Body2=""/>}
@@ -91,8 +86,7 @@ const BasicMode = ({ handleNotification = () => {}}) => {
       {startGame && <Stack flexDirection={"column"} alignItems={"center"} justifyContent={"center"} gap={2}>
         <Typography 
           variant="body1" 
-          textAlign={'center'} 
-          fontSize={FontSize.NORMAL}
+          textAlign={'center'}
         >
           Pulsa en la tarjeta para ver la respuesta. <br/>Usa las flechas para ajustar la frecuencia de aparición de la tarjeta.
         </Typography>
@@ -117,7 +111,6 @@ const BasicMode = ({ handleNotification = () => {}}) => {
 }
 
 BasicMode.propTypes = {
-  handleNotification: PropTypes.func
 }
 
 export default BasicMode

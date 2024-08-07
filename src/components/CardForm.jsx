@@ -1,20 +1,19 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
-import useField from "../hooks/useField"
-import { useDispatch, useSelector } from "react-redux"
-import { createCard } from "../reducer/cardReducer"
-import { FontSize, PaddingSize } from "../utils/constants"
+import PropTypes from "prop-types"
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import useField from "../hooks/useField"
+import { createCard } from "../reducer/cardReducer"
 import { createCategory } from "../reducer/categoryReducer"
-import { setCategoryLocal } from "../utils/localStorage"
-import PropTypes from "prop-types";
 import { successNotification } from "../reducer/notificationReducer"
+import { setCategoryLocal } from "../utils/localStorage"
 import ModalDialog from "./ModalDialog"
 
 const fieldStyle = {
   width: "400px",
 }
 
-const CardForm = ({ handleNotification }) => {
+const CardForm = () => {
   const questionField = useField('')
   const answerField = useField('')
   const difficultField = useField('')
@@ -41,7 +40,6 @@ const CardForm = ({ handleNotification }) => {
     dispatch(createCard(card))
     cleanField()
     dispatch(successNotification("Se ha creado la tarjeta correctamente"))
-    handleNotification()
   }
 
   const handleSubmitDialog = (e) => {
@@ -54,7 +52,6 @@ const CardForm = ({ handleNotification }) => {
     dispatch(createCategory(newCategory))
     closeDialog()
     dispatch(successNotification(`Se ha creado la categoria "${newCategory}"`))
-    handleNotification()
   } 
 
   const closeDialog = () => {setOpenDialog(false)}
@@ -69,10 +66,10 @@ const CardForm = ({ handleNotification }) => {
         alignItems: "center",
         justifyContent: "center",
         gap: 2,
-        padding: PaddingSize.NORMAL
+        padding: 2
       }}
     >
-      <Typography variant="h2" fontSize={FontSize.BIG} align="center">Crear una nueva tarjeta</Typography>
+      <Typography variant="h2" align="center">Crear una nueva tarjeta</Typography>
       <Box 
         component="form" 
         flexDirection={"column"} 
@@ -133,15 +130,15 @@ const CardForm = ({ handleNotification }) => {
             </Select>
           </FormControl>
           <Button variant="contained" onClick={() => setOpenDialog(true)}>
-            <Typography fontSize={FontSize.SMALL}>Crear Categoría</Typography>
+            <Typography variant="body2">Crear Categoría</Typography>
           </Button>
         </Stack>
         <Box component="div" gap={2} display="flex">
           <Button variant="contained" type="submit">
-            <Typography fontSize={FontSize.NORMAL}>Guardar</Typography>
+            <Typography variant="body1">Guardar</Typography>
           </Button>
           <Button variant="outlined" onClick={cleanField}>
-            <Typography fontSize={FontSize.NORMAL}>Limpiar</Typography>
+            <Typography variant="body1">Limpiar</Typography>
           </Button>
         </Box>
       </Box>

@@ -8,6 +8,7 @@ import { Route, Routes } from "react-router-dom"
 import Navbar from "./components/Navbar"
 import ManageCards from "./pages/ManageCards/ManageCards"
 import GameCard from "./pages/GameCard/GameCard"
+import Notification from "./components/Notification"
 
 function App() {
   const dispatch = useDispatch()
@@ -19,6 +20,7 @@ function App() {
   
   return (
     <Container >
+      <Notification/>
       <Navbar/>
       <Routes>
         <Route path="/gestionar-tarjetas" element={<ManageCards/>}/>

@@ -5,25 +5,31 @@ const notificationSlice = createSlice({
   initialState: {
     label: '',
     severity: 'success',
-    color: 'success'
+    color: 'success',
+    on: false
   },
   reducers: {
     setNotification(state, action) {
       return action.payload
+    },
+    changeOnNotification(state, action) {
+      state.on = action.payload
     }
   }
 })
 
-export const { setNotification } = notificationSlice.actions
+export const { setNotification, changeOnNotification } = notificationSlice.actions
 
 export const successNotification = (text) => {
   return async (dispatch) => {
     const option ={
       label: text,
       severity: 'success',
-      color: 'success'
+      color: 'success',
+      on: true
     }
     dispatch(setNotification(option))
+    dispatch
   }
 }
 
@@ -32,7 +38,8 @@ export const infoNotification = (text) => {
     const option ={
       label: text,
       severity: 'success',
-      color: 'info'
+      color: 'info',
+      on: true
     }
     dispatch(setNotification(option))
   }
@@ -43,7 +50,8 @@ export const errorNotification = (text) => {
     const option ={
       label: text,
       severity: 'error',
-      color: 'error'
+      color: 'error',
+      on: true
     }
     dispatch(setNotification(option))
   }

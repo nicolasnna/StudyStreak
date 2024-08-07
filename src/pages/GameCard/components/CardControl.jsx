@@ -1,5 +1,4 @@
 import { Button, Stack, Typography } from "@mui/material"
-import { FontSize } from "../../../utils/constants"
 import PropTypes from 'prop-types'
 
 const CardControl = ({
@@ -14,7 +13,7 @@ const CardControl = ({
   return (
     <Stack display={"flex" } gap={1}>
       <Stack flexDirection={'row'} alignItems={"center"} justifyContent={"center"}>
-          <Typography variant="body1" fontSize={FontSize.NORMAL}>
+          <Typography variant="body1" >
             {currentIndex+1} / {maxIndex+1}
           </Typography>
         </Stack>
@@ -24,7 +23,7 @@ const CardControl = ({
             variant="contained" 
             onClick={handlePrev}
           >
-            <Typography fontSize={FontSize.NORMAL}>
+            <Typography variant="body1">
             Anterior
             </Typography>
           </Button>
@@ -32,7 +31,7 @@ const CardControl = ({
             variant="outlined"
             onClick={handleShuffle}
           >
-            <Typography fontSize={FontSize.NORMAL}>
+            <Typography variant="body1">
             Volver a barajar
             </Typography>
           </Button> 
@@ -41,7 +40,7 @@ const CardControl = ({
             variant="contained"
             onClick={handleNext}
           >
-            <Typography fontSize={FontSize.NORMAL}>
+            <Typography variant="body1">
             Siguiente
             </Typography>
           </Button>

@@ -1,21 +1,20 @@
 import { Box, Stack, Typography } from "@mui/material"
 import PropTypes from "prop-types";
-import { FontSize, PaddingSize } from "../utils/constants";
 
 const Header = ({Title = "", SubTitle = ""}) => {
   return (
     <Box
       display='flex'
       flexDirection='column'
-      padding={PaddingSize.NORMAL}
+      padding={1}
       gap={1}
     >
-      <Typography variant="h1" fontSize={FontSize.TITLE} align="center">
+      <Typography variant="h1" align="center">
         {Title}
       </Typography>
 
       {SubTitle && <Stack alignItems={"center"}>
-        <Typography fontSize={FontSize.HIGH}>
+        <Typography variant="h2">
           {SubTitle}
         </Typography>
       </Stack>}
