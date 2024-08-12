@@ -5,15 +5,12 @@ import FlashCard from "../../components/FlashCard/FlashCard"
 import Header from "../../components/Header"
 import JsonManager from "../../components/JsonManager"
 
-const manageCardsStyle = {
-  marginTop: '2em'
-}
 
 const ManageCards = () => {
   const cards = useSelector(state => state.card)
 
   return (
-    <Box sx={manageCardsStyle}>
+    <Box >
       <Header 
         Title={"Gestiona tus Tarjetas de Estudio"}
         SubTitle=" Organiza, personaliza y mantén tu contenido actualizado."
@@ -28,22 +25,14 @@ const ManageCards = () => {
         <CardForm />
         <JsonManager/>
       </Stack>
-      <Stack
-        flexDirection={'column'}
-        alignItems={'center'}
-        justifyContent='center'
-        padding={1}
+      <Box
+        className="manage-cards__list"
       >
-        <Typography variant="h2">
+        <Typography className="manage-cards__list__text--title" variant="h2">
           Tarjetas creadas
         </Typography>
-        <Stack
-          flexDirection='row'
-          flexWrap='wrap'
-          gap={3}
-          justifyContent={'center'}
-          alignItems='center'
-          marginTop='2em'
+        <Box
+          className="manage-cards__list__content" 
         >
           {cards.length === 0 && <Typography variant="body1">
             Añade tarjetas para poder visualizarlas aquí.
@@ -55,8 +44,8 @@ const ManageCards = () => {
               manageMode={true}
             />
           )}
-        </Stack>
-      </Stack>
+        </Box>
+      </Box>
     </Box>
   )
 }

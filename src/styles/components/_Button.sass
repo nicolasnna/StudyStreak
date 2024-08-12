@@ -1,0 +1,22 @@
+@import '../base/colors'
+  
+.button
+  &--primary
+    background-color: $primary!important
+    color: $background !important
+    
+    &:hover
+      background-color: $background-secondary !important
+      border: 1px solid $primary
+      color: $primary !important
+      box-shadow: 1px 1px 5px 1px $primary
+
+  &--secondary
+    background-color: $secondary!important
+    color: $primary !important
+    border: 1px solid $primary !important
+    
+    &:hover
+      background-color: $background-secondary !important
+      border: 1px solid $primary
+      box-shadow: 1px 1px 5px 1px $primary

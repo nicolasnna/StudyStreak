@@ -1,6 +1,8 @@
 import ArticleIcon from '@mui/icons-material/Article';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Paper, Stack, Typography } from "@mui/material";
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import SaveIcon from '@mui/icons-material/Save';
+import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCards } from "../reducer/cardReducer";
@@ -74,26 +76,23 @@ const JsonManager = () => {
   }
 
   return (
-    <Box component={Paper}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        padding: 1.5
-      }}  
-    >
+    <Box className="json-manager">
       <Typography variant="h2" align="center">
         Exporta/Importa tus tarjetas
       </Typography>
       <Stack flexDirection={"row"} gap={2} justifyContent={'center'} alignItems={'center'}>
-        <Button variant="contained" onClick={handleExportCards}>
+        <Button 
+          className='button--primary json-manager__button' 
+          onClick={handleExportCards}
+          startIcon={<CloudDownloadIcon />}
+        >
           Exportar
         </Button>
-        <Typography variant="body2">O</Typography>
+        <Typography variant="body2"><strong>O</strong></Typography>
         <Button
           component="label"
+          className='button--primary json-manager__button'
           role={undefined}
-          variant="contained"
           tabIndex={-1}
           startIcon={<CloudUploadIcon />}
         >
@@ -106,21 +105,31 @@ const JsonManager = () => {
           />
         </Button>
       </Stack>
-      {showUpload && <Box>
-        <Typography align="center" variant="h3">Se ha leído {dataUpload.length} tarjetas <br/> ¿Desea importarlos?</Typography>
-        <Stack flexDirection="row" alignItems="center" justifyContent='center'>
-          <Button width={20} variant="contained" onClick={handleSaveCards}>Guardar</Button>
-        </Stack>
+      {showUpload && <Box className="json-manager__show-upload" >
         <List dense sx={{ width: '100%', maxHeight: 200, overflow: 'auto'}}>
           {dataUpload.map((c) => (
             <ListItem key={c.id} divider>
-              <ListItemIcon>
+              <ListItemIcon className='json-manager__icon'>
                 <ArticleIcon edge="start" disableRipple/>
               </ListItemIcon>
               <ListItemText primary={c.question}/>
             </ListItem>
           ))}
         </List>
+        <Typography align="center" variant="h3">
+          Se ha leído {dataUpload.length} tarjetas <br/> ¿Desea <strong className='accent'>importarlos</strong>?
+        </Typography>
+        <Stack flexDirection="row" alignItems="center" justifyContent='center'>
+          <Button 
+            className="button--primary json-manager__button" 
+            onClick={handleSaveCards}
+            startIcon={<SaveIcon/>}
+          >
+            <strong>
+              Guardar
+            </strong>
+          </Button>
+        </Stack>
       </Box>}
     </Box>
   )

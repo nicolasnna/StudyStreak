@@ -8,8 +8,9 @@ const Header = ({Title = "", SubTitle = ""}) => {
       flexDirection='column'
       padding={1}
       gap={1}
+      marginBottom={5}
     >
-      <Typography variant="h1" align="center">
+      <Typography variant="h1" align="center" >
         {Title}
       </Typography>
 

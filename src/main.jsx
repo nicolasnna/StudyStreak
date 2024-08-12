@@ -8,6 +8,7 @@ import {
 import store from './reducer/store.js'
 import { ThemeProvider } from '@mui/material'
 import theme from './theme/theme.js'
+import './style.sass'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -1,0 +1,50 @@
+@import '../base/colors'
+@import '../base/variables'
+
+.cardform
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: $padding-normal
+  border-radius: $border-radius-normal
+  box-shadow: $box-shadow-primary
+  
+  background-color: $background-secondary
+  width: 25em
+  height: 15em
+
+  &__textfield
+    border-radius: 5px
+    background-color: $background
+
+    .MuiOutlinedInput-root 
+
+      &:hover fieldset 
+        border-color: $primary !important // Cambia el color del borde cuando está en hover
+      &.Mui-focused fieldset 
+        border-color: blue !important // Cambia el color del borde cuando está enfocado
+    &.MuiOutlinedInput-root 
+      &:hover fieldset 
+        border-color: $primary !important // Cambia el color del borde cuando está en hover
+      &.Mui-focused fieldset 
+        border-color: blue !important // Cambia el color del borde cuando está enfocado
+
+    & label
+      color: $primary
+
+    & .MuiSelect-icon 
+      color: $primary
+
+  &__input-label
+    color: $primary !important
+
+  &__button
+    width: 8em
+    height: 2.5em
+    
+    &--category
+      width: 15em 
+      height: 2.8em
+    
+

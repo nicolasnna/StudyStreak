@@ -19,15 +19,17 @@ function App() {
   }, [dispatch])
   
   return (
-    <Container >
-      <Notification/>
+    <div className="content">
       <Navbar/>
-      <Routes>
-        <Route path="/gestionar-tarjetas" element={<ManageCards/>}/>
-        <Route path="/modos-de-juego/*" element={<GameCard/>}/>
-      </Routes>
-    </Container>
-  )
+        <Container sx={{marginTop: '5em'}} >
+          <Notification/>
+          <Routes>
+            <Route path="/gestionar-tarjetas" element={<ManageCards/>}/>
+            <Route path="/modos-de-juego/*" element={<GameCard/>}/>
+          </Routes>
+        </Container>
+    </div>
+    )
 }
                                                                                                                                                                 
 export default App

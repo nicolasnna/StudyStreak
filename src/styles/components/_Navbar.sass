@@ -1,0 +1,32 @@
+@import '../base/_colors.sass'
+  
+.navbar
+  display: flex
+  flex-direction: row
+  align-items: center
+  justify-content: center
+  position: fixed
+  width: 100%
+  gap: 3em
+  background-color: $background-secondary
+  z-index: 5
+
+  &__options
+    text-decoration: none
+    color: $primary
+
+    &:visited
+      color: $primary
+
+    &__content
+      padding: 1em
+      display: flex
+      align-items: center
+      justify-content: center
+      cursor: pointer
+      
+      &:hover
+        opacity: 1.0
+        border-bottom: 3px solid $primary
+        padding-bottom: calc(1em - 3px)
+

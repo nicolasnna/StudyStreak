@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material"
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -9,9 +9,6 @@ import { successNotification } from "../reducer/notificationReducer"
 import { setCategoryLocal } from "../utils/localStorage"
 import ModalDialog from "./ModalDialog"
 
-const fieldStyle = {
-  width: "400px",
-}
 
 const CardForm = () => {
   const questionField = useField('')
@@ -57,24 +54,22 @@ const CardForm = () => {
   const closeDialog = () => {setOpenDialog(false)}
 
   return (
-    <Box 
-      component={Paper}
-      sx={{
-        display:"flex",
-        flexDirection:"column",
-        width: "max-content",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 2,
-        padding: 2
-      }}
-    >
-      <Typography variant="h2" align="center">Crear una nueva tarjeta</Typography>
+    <Box className="cardform">
+      <Box
+        width={"100%"}
+        height={"100%"}
+      >
+        <Typography variant="h2" align="center">
+          Crear una nueva tarjeta
+        </Typography>
+      </Box>
       <Box 
         component="form" 
         flexDirection={"column"} 
         display="flex" 
         gap={1}
+        width={"100%"}
+        height={"100%"} 
         onSubmit={createNewCard}
         >
         <TextField
@@ -84,32 +79,38 @@ const CardForm = () => {
           size="small"
           type="sentence"
           multiline
-          sx={fieldStyle}
           maxRows={2}
+          className="cardform__textfield"
           value={questionField.value}
           onChange={questionField.changeValue}
-          inputProps={{ maxLength: 60 }}
+          inputProps={{ maxLength: 60, style:{color: '#551aa2'} }}
         />
         <TextField
           id="answer-text"
           label="Respuesta"
           size="small"
           type="words"
+          className="cardform__textfield"
           maxRows={3}
           multiline
-          sx={fieldStyle}
+          
           value={answerField.value}
           onChange={answerField.changeValue}
-          inputProps={{ maxLength: 200}}
+          inputProps={{ maxLength: 200, style:{color: '#551aa2'}}}
         />
         <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'} gap={1}>
           <FormControl fullWidth size="small" required>
-            <InputLabel id="selector-difficult-label">Dificultad</InputLabel>
+            <InputLabel 
+              className="cardform__input-label" id="selector-difficult-label"
+            >
+              Dificultad
+            </InputLabel>
             <Select
               labelId="selector-difficult-label"
               id="selector-difficult"
               label="Dificultad"
               value={difficultField.value}
+              className="cardform__textfield"
               onChange={difficultField.changeValue}
             >
               <MenuItem value='easy'>Fácil</MenuItem>
@@ -118,27 +119,39 @@ const CardForm = () => {
             </Select>
           </FormControl>
           <FormControl fullWidth size="small" >
-            <InputLabel id="selector-tag-label">Categoría</InputLabel>
+            <InputLabel 
+              className="cardform__input-label" id="selector-tag-label"
+            >
+              Categoría
+            </InputLabel>
             <Select
               labelId="selector-tag-label"
               id="selector-tag"
               label="Categoría"
+              className="cardform__textfield"
               value={tagField.value}
               onChange={tagField.changeValue}
             > 
               {categories.map(c => (<MenuItem key={c} value={c}>{c}</MenuItem>))}
             </Select>
           </FormControl>
-          <Button variant="contained" onClick={() => setOpenDialog(true)}>
+          <Button 
+            className="button--primary cardform__button--category"
+            onClick={() => setOpenDialog(true)}
+          >
             <Typography variant="body2">Crear Categoría</Typography>
           </Button>
         </Stack>
         <Box component="div" gap={2} display="flex">
-          <Button variant="contained" type="submit">
-            <Typography variant="body1">Guardar</Typography>
+          <Button className="button--primary cardform__button" type="submit">
+            <Typography variant="body1">
+              <strong>Guardar</strong>
+            </Typography>
           </Button>
-          <Button variant="outlined" onClick={cleanField}>
-            <Typography variant="body1">Limpiar</Typography>
+          <Button className="button--secondary cardform__button" onClick={cleanField}>
+            <Typography variant="body1">
+              <strong>Limpiar</strong>
+            </Typography>
           </Button>
         </Box>
       </Box>
