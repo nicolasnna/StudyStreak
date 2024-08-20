@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import {
   BrowserRouter as Router
 } from 'react-router-dom'
-import store from './reducer/store.js'
+import store from '@reducer/store.js'
 import { ThemeProvider } from '@mui/material'
 import theme from './theme/theme.js'
 import './style.sass'

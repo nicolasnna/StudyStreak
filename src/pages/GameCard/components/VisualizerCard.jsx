@@ -1,6 +1,6 @@
 import { Box, IconButton, Stack } from "@mui/material";
 import PropTypes from 'prop-types'
-import FlashCard from "../../../components/FlashCard/FlashCard";
+import FlashCard from "@components/FlashCard/FlashCard";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 

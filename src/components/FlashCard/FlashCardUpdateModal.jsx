@@ -1,10 +1,10 @@
 import { FormControl, InputLabel, MenuItem, Select, Stack, TextField } from '@mui/material'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import useField from '../../hooks/useField'
-import { modifyCardById } from '../../reducer/cardReducer'
-import { successNotification } from '../../reducer/notificationReducer'
-import ModalDialog from '../ModalDialog'
+import useField from '@hooks/useField'
+import { modifyCardById } from '@reducer/cardReducer'
+import { successNotification } from '@reducer/notificationReducer'
+import ModalDialog from '@components/ModalDialog'
 
 const FlashCardUpdateModal = ({card, open, handleClose}) => {
   const categories = useSelector(state => state.category)

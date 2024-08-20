@@ -1,14 +1,14 @@
 import { Container } from "@mui/material"
 import { useDispatch } from "react-redux"
 import { useEffect } from "react"
-import { setCards } from "./reducer/cardReducer"
-import { getCardLocal, getCategoryLocal } from "./utils/localStorage"
-import { setCategories } from "./reducer/categoryReducer"
+import { setCards } from "@reducer/cardReducer"
+import { getCardLocal, getCategoryLocal } from "@utils/localStorage"
+import { setCategories } from "@reducer/categoryReducer"
 import { Route, Routes } from "react-router-dom"
-import Navbar from "./components/Navbar"
-import ManageCards from "./pages/ManageCards/ManageCards"
-import GameCard from "./pages/GameCard/GameCard"
-import Notification from "./components/Notification"
+import Navbar from "@components/Navbar"
+import ManageCards from "@pages/ManageCards/ManageCards"
+import GameCard from "@pages/GameCard/GameCard"
+import Notification from "@components/Notification"
 
 function App() {
   const dispatch = useDispatch()

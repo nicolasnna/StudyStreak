@@ -17,7 +17,7 @@ const FlashCardFront = ({text, difficulty, categories}) => {
         </Typography>
       </Stack>
       <Stack flexDirection={"row"} gap={3} height={'20%'}>
-        <Typography variant='body2'><strong>{dictDifficulty[difficulty]}</strong></Typography>
+        <Typography variant='body2'><strong className='accent--strong'>{dictDifficulty[difficulty]}</strong></Typography>
         <Typography variant='body2'>{categories}</Typography>
       </Stack>
     </Stack>

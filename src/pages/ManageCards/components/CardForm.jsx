@@ -2,12 +2,12 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextFiel
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import useField from "../hooks/useField"
-import { createCard } from "../reducer/cardReducer"
-import { createCategory } from "../reducer/categoryReducer"
-import { successNotification } from "../reducer/notificationReducer"
-import { setCategoryLocal } from "../utils/localStorage"
-import ModalDialog from "./ModalDialog"
+import useField from "@hooks/useField"
+import { createCard } from "@reducer/cardReducer"
+import { createCategory } from "@reducer/categoryReducer"
+import { successNotification } from "@reducer/notificationReducer"
+import { setCategoryLocal } from "@utils/localStorage"
+import ModalDialog from "@components/ModalDialog"
 
 
 const CardForm = () => {

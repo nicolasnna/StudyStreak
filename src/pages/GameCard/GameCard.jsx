@@ -1,8 +1,8 @@
+import Header from "@components/Header";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import Header from "../../components/Header";
-import BasicMode from "./components/BasicMode";
+import { FontSize } from "@utils/constants";
 import { Link, Route, Routes } from "react-router-dom";
-import { FontSize } from "../../utils/constants";
+import BasicMode from "./components/BasicMode";
 import MultipleSelectionMode from "./components/MultipleSelectionMode";
 
 const buttonRoutes = [

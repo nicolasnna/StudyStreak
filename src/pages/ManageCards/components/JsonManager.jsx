@@ -5,10 +5,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCards } from "../reducer/cardReducer";
-import { errorNotification, successNotification } from "../reducer/notificationReducer";
-import { CardKeys } from "../utils/constants";
-import { setCardLocal } from "../utils/localStorage";
+import { setCards } from "@reducer/cardReducer";
+import { errorNotification, successNotification } from "@reducer/notificationReducer";
+import { CardKeys } from "@utils/constants";
+import { setCardLocal } from "@utils/localStorage";
 
 const JsonManager = () => {
   const [ dataUpload, setDataUpload ] = useState([])

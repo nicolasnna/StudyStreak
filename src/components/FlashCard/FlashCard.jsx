@@ -2,6 +2,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FlipIcon from "@mui/icons-material/Flip";
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import {
+  Box,
   Card,
   CardContent,
   DialogContentText,
@@ -12,21 +13,13 @@ import {
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteCardById } from "../../reducer/cardReducer";
-import { infoNotification } from "../../reducer/notificationReducer";
-import ModalDialog from "../ModalDialog";
+import { deleteCardById } from "@reducer/cardReducer";
+import { infoNotification } from "@reducer/notificationReducer";
+import ModalDialog from "@components/ModalDialog";
 import FlashCardBack from "./FlashCardBack";
 import FlashCardFront from "./FlashCardFront";
 import FlashCardUpdateModal from "./FlashCardUpdateModal";
 
-const cardStyle = {
-  width: "300px",
-  height: "300px",
-  padding: 1,
-  display: "flex",
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-};
 
 const FlashCard = ({
   cardContent,
@@ -58,10 +51,9 @@ const FlashCard = ({
 
   return (
     <>
-      <Card
-        component={Paper}
+      <Box
         id={cardContent.id}
-        sx={cardStyle}
+        className="flash-card"
         onClick={flipWithClick}
       >
         {manageMode && (
@@ -112,7 +104,7 @@ const FlashCard = ({
               </IconButton>
             </Stack>
           )}
-      </Card>
+      </Box>
 
       <ModalDialog
         title="Eliminar tarjeta?"

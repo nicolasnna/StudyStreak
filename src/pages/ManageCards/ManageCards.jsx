@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material"
 import { useSelector } from "react-redux"
-import CardForm from "../../components/CardForm"
-import FlashCard from "../../components/FlashCard/FlashCard"
-import Header from "../../components/Header"
-import JsonManager from "../../components/JsonManager"
+import CardForm from "./components/CardForm"
+import FlashCard from "@components/FlashCard/FlashCard"
+import Header from "@components/Header"
+import JsonManager from "./components/JsonManager"
 
 
 const ManageCards = () => {
