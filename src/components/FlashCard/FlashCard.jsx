@@ -1,21 +1,13 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import FlipIcon from "@mui/icons-material/Flip";
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import ModalDialog from "@components/ModalDialog";
 import {
   Box,
-  Card,
-  CardContent,
-  DialogContentText,
-  IconButton,
-  Paper,
-  Stack
+  DialogContentText
 } from "@mui/material";
+import { deleteCardById } from "@reducer/cardReducer";
+import { infoNotification } from "@reducer/notificationReducer";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteCardById } from "@reducer/cardReducer";
-import { infoNotification } from "@reducer/notificationReducer";
-import ModalDialog from "@components/ModalDialog";
 import FlashCardBack from "./FlashCardBack";
 import FlashCardFront from "./FlashCardFront";
 import FlashCardUpdateModal from "./FlashCardUpdateModal";
@@ -31,6 +23,7 @@ const FlashCard = ({
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false)
   const dispatch = useDispatch();
   
+  const flipClass = flipped ? 'is-flipped' : '';
 
   const ChangeFlipped = () => setFlipped(!flipped);
   const handleDialog = () => setOpenDialog(true);
@@ -53,57 +46,25 @@ const FlashCard = ({
     <>
       <Box
         id={cardContent.id}
-        className="flash-card"
+        className={`flash-card ${flipClass}`}
         onClick={flipWithClick}
       >
-        {manageMode && (
-            <Stack
-              flexDirection={"row"}
-              justifyContent="end"
-            >
-              <IconButton onClick={handleDialog} aria-label="delete-button">
-                <DeleteIcon />
-              </IconButton>
-              <IconButton onClick={ChangeFlipped} aria-label="flip-button">
-                <FlipIcon />
-              </IconButton>
-            </Stack>
-          )}
-        <CardContent
-          sx={{
-            display:'flex',
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            width: "100%",
-            height: "100%",
-            paddingTop: 0,
-            paddingBottom: 0,
-            flexGrow: 1,
-            boxSizing: 'border-box',
-            overflow: 'auto',
-          }}
-        >
-          {!flipped && (
-            <FlashCardFront 
-              text={cardContent.question} 
-              difficulty={cardContent.difficulty} 
-              categories={cardContent.tags}/>
-          )}
-          {flipped && (
-            <FlashCardBack text={cardContent.answer}/>
-          )}
-        </CardContent>
-        {manageMode && (
-            <Stack
-              flexDirection={"row"}
-              justifyContent="start"
-            >
-              <IconButton onClick={handleDialogUpdate} aria-label="update-button">
-                <SystemUpdateAltIcon />
-              </IconButton>
-            </Stack>
-          )}
+        <FlashCardFront 
+          manageMode={manageMode}
+          text={cardContent.question} 
+          difficulty={cardContent.difficulty} 
+          categories={cardContent.tags}
+          handleDialog={handleDialog}
+          handleDialogUpdate={handleDialogUpdate}
+          ChangeFlipped={ChangeFlipped}
+        />
+        <FlashCardBack 
+          text={cardContent.answer}
+          manageMode={manageMode}
+          handleDialog={handleDialog}
+          handleDialogUpdate={handleDialogUpdate}
+          ChangeFlipped={ChangeFlipped}
+        />
       </Box>
 
       <ModalDialog

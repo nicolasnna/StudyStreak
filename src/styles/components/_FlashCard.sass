@@ -10,3 +10,40 @@
   background-color: $secondary
   border-radius: $border-radius-normal
   box-shadow: $box-shadow-secondary
+  transition: transform 0.9s, box-shadow 1s
+  transform-style: preserve-3d
+  position: relative
+
+  &__content
+    display: flex
+    flex-direction: column
+    height: 100%
+    overflow: auto
+    padding: 0 0.5em
+    text-align: center
+    align-items: center
+    justify-content: center
+
+  &__icon
+    color: $primary
+
+  &__back, &__front
+    display: flex
+    flex-direction: column
+    height: 95%
+    width: 95%
+    position: absolute
+    top: 2.5%
+    left: 2.5%
+    backface-visibility: hidden
+    
+  &__front
+    z-index: 1
+
+  &__back
+    transform: rotateY(180deg)
+
+  &.is-flipped
+    transform: perspective(700px) rotateY(180deg)
+    box-shadow: $box-shadow-secondary-reverse
+
