@@ -1,4 +1,12 @@
 @import '@styles/base/index'
+@keyframes appear
+  0%
+    opacity: 0
+    scale: 0.5
+  100%
+    opacity: 1
+    scale: 1
+@include fade-in-animation(fadeIn)
 
 .manage-cards
   &__list
@@ -6,11 +14,12 @@
     flex-direction: column
     align-items: center
     justify-content: center
-    margin-top: 2em
+    margin-top: 4em
   
     &__text
       &--title
         font-size: 2.3em !important
+        color: $text
 
     &__content
       display: flex
@@ -20,3 +29,9 @@
       align-items: center
       justify-content: center
       margin: 1.5em 0
+      animation: fadeIn 0.3s ease-out forwards
+
+  &__flashcard
+    animation: appear linear
+    animation-timeline: view()
+    animation-range: entry 0 cover 25%

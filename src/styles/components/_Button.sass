@@ -11,10 +11,21 @@
       color: $primary !important
       box-shadow: 1px 1px 5px 1px $primary
 
+    &--active
+      background-color: $background-secondary !important
+      border: 1px solid $primary
+      color: $primary !important
+      box-shadow: 1px 1px 5px 1px $primary
+
+    &:disabled
+      background-color: rgba($primary,0.4) !important
+      color: $background !important
+
   &--secondary
     background-color: $secondary!important
     color: $primary !important
     border: 1px solid $primary !important
+    backdrop-filter: blur(5px)
     
     &:hover
       background-color: $background-secondary !important

@@ -1,24 +1,20 @@
-import { Box, Stack, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import PropTypes from "prop-types";
 
 const Header = ({Title = "", SubTitle = ""}) => {
   return (
     <Box
-      display='flex'
-      flexDirection='column'
-      padding={1}
-      gap={1}
-      marginBottom={5}
+      className="header"
     >
-      <Typography variant="h1" align="center" >
+      <Typography variant="h1"  >
         {Title}
       </Typography>
 
-      {SubTitle && <Stack alignItems={"center"}>
-        <Typography variant="h2">
-          {SubTitle}
-        </Typography>
-      </Stack>}
+      {SubTitle && 
+      <Typography variant="h2">
+        {SubTitle}
+      </Typography>
+      }
     </Box>
   )
 } 

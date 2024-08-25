@@ -8,15 +8,19 @@
   position: fixed
   width: 100%
   gap: 3em
-  background-color: $background-secondary
+  background-color: $bg-navbar
+  box-shadow: $box-shadow-primary
+  backdrop-filter: blur(5px)
   z-index: 5
 
   &__options
     text-decoration: none
-    color: $primary
+    color: $accent
+    font-weight: bold
+ 
 
     &:visited
-      color: $primary
+      color: $accent
 
     &__content
       padding: 1em
@@ -24,9 +28,12 @@
       align-items: center
       justify-content: center
       cursor: pointer
+      transition: text-shadow 0.5s
       
       &:hover
         opacity: 1.0
         border-bottom: 3px solid $primary
         padding-bottom: calc(1em - 3px)
+        text-shadow: $box-shadow-accent-text
+        background-color: rgba($primary, 0.05)
 

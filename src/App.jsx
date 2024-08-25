@@ -12,24 +12,24 @@ import Notification from "@components/Notification"
 
 function App() {
   const dispatch = useDispatch()
-  
+
   useEffect(() => {
     dispatch(setCards(getCardLocal()))
     dispatch(setCategories(getCategoryLocal()))
   }, [dispatch])
-  
+
   return (
     <div className="content">
-      <Navbar/>
-        <Container sx={{marginTop: '5em'}} >
-          <Notification/>
-          <Routes>
-            <Route path="/gestionar-tarjetas" element={<ManageCards/>}/>
-            <Route path="/modos-de-juego/*" element={<GameCard/>}/>
-          </Routes>
-        </Container>
+      <Navbar />
+      <Container sx={{ marginTop: "5em" }}>
+        <Notification />
+        <Routes>
+          <Route path="/gestionar-tarjetas" element={<ManageCards />} />
+          <Route path="/modos-de-juego/*" element={<GameCard />} />
+        </Routes>
+      </Container>
     </div>
-    )
+  )
 }
-                                                                                                                                                                
+
 export default App

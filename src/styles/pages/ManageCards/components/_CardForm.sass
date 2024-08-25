@@ -1,4 +1,5 @@
 @import '@styles/base/index'
+@include fade-in-animation(fadeIn)
 
 .cardform
   display: flex
@@ -8,10 +9,13 @@
   padding: $padding-normal
   border-radius: $border-radius-normal
   box-shadow: $box-shadow-primary
-  
   background-color: $background-secondary
   width: 25em
   height: 15em
+  animation: fadeIn 1s ease-out forwards
+  
+  h2
+    color: $text
 
   &__textfield
     border-radius: 5px

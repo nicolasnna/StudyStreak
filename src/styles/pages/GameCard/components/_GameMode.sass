@@ -1,0 +1,33 @@
+@import '@styles/base/index'
+@include appear-from-up(appear)
+
+.game-mode
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  padding: 2em
+  gap: 1em
+
+  &__title
+    font-size: $size-text-big !important
+    color: $text
+    font-weight: bold !important
+
+  &__subtitle
+    font-size: $size-text-high !important
+    color: $text
+    font-weight: bold !important
+
+  &__text
+    color: $text
+    font-size: $size-text-normal !important
+    text-align: center
+
+  &__content
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: 1.5em
+    animation: appear .7s ease-out forwards
