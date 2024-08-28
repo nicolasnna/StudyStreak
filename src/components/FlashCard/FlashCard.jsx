@@ -1,33 +1,30 @@
-import ModalDialog from "@components/ModalDialog";
-import {
-  Box,
-  DialogContentText
-} from "@mui/material";
-import { deleteCardById } from "@reducer/cardReducer";
-import { infoNotification } from "@reducer/notificationReducer";
-import PropTypes from "prop-types";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import FlashCardBack from "./FlashCardBack";
-import FlashCardFront from "./FlashCardFront";
-import FlashCardUpdateModal from "./FlashCardUpdateModal";
-
+import ModalDialog from "@components/ModalDialog"
+import { Box, DialogContentText } from "@mui/material"
+import { deleteCardById } from "@reducer/cardReducer"
+import { infoNotification } from "@reducer/notificationReducer"
+import PropTypes from "prop-types"
+import { useState } from "react"
+import { useDispatch } from "react-redux"
+import FlashCardBack from "./FlashCardBack"
+import FlashCardFront from "./FlashCardFront"
+import FlashCardUpdateModal from "./FlashCardUpdateModal"
 
 const FlashCard = ({
   cardContent,
   manageMode = false,
   disableFlip = false,
+  initialFlipped = false,
 }) => {
-  const [flipped, setFlipped] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [flipped, setFlipped] = useState(initialFlipped)
+  const [openDialog, setOpenDialog] = useState(false)
   const [openDialogUpdate, setOpenDialogUpdate] = useState(false)
-  const dispatch = useDispatch();
-  
-  const flipClass = flipped ? 'is-flipped' : '';
+  const dispatch = useDispatch()
 
-  const ChangeFlipped = () => setFlipped(!flipped);
-  const handleDialog = () => setOpenDialog(true);
-  const closeDialog = () => setOpenDialog(false);
+  const flipClass = flipped ? "is-flipped" : ""
+
+  const ChangeFlipped = () => setFlipped(!flipped)
+  const handleDialog = () => setOpenDialog(true)
+  const closeDialog = () => setOpenDialog(false)
   const handleDialogUpdate = () => setOpenDialogUpdate(true)
   const closeDialogUpdate = () => setOpenDialogUpdate(false)
   const flipWithClick = () => {
@@ -37,10 +34,10 @@ const FlashCard = ({
   }
 
   const deleteFlashCard = () => {
-    closeDialog();
-    dispatch(infoNotification("Se ha eliminado la tarjeta correctamente"));
-    dispatch(deleteCardById(cardContent.id));
-  };
+    closeDialog()
+    dispatch(infoNotification("Se ha eliminado la tarjeta correctamente"))
+    dispatch(deleteCardById(cardContent.id))
+  }
 
   return (
     <>
@@ -49,16 +46,16 @@ const FlashCard = ({
         className={`flash-card ${flipClass}`}
         onClick={flipWithClick}
       >
-        <FlashCardFront 
+        <FlashCardFront
           manageMode={manageMode}
-          text={cardContent.question} 
-          difficulty={cardContent.difficulty} 
+          text={cardContent.question}
+          difficulty={cardContent.difficulty}
           categories={cardContent.tags}
           handleDialog={handleDialog}
           handleDialogUpdate={handleDialogUpdate}
           ChangeFlipped={ChangeFlipped}
         />
-        <FlashCardBack 
+        <FlashCardBack
           text={cardContent.answer}
           manageMode={manageMode}
           handleDialog={handleDialog}
@@ -80,18 +77,20 @@ const FlashCard = ({
           {cardContent.answer}
         </DialogContentText>
       </ModalDialog>
-      <FlashCardUpdateModal 
-        card={cardContent} 
+      <FlashCardUpdateModal
+        card={cardContent}
         open={openDialogUpdate}
-        handleClose={closeDialogUpdate}/>
+        handleClose={closeDialogUpdate}
+      />
     </>
-  );
-};
+  )
+}
 
 FlashCard.propTypes = {
   cardContent: PropTypes.object,
   manageMode: PropTypes.bool,
   disableFlip: PropTypes.bool,
-};
+  initialFlipped: PropTypes.bool,
+}
 
-export default FlashCard;
+export default FlashCard

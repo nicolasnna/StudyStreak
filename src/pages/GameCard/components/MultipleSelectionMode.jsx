@@ -1,29 +1,22 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-} from "@mui/material"
-import PropTypes from "prop-types"
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import WaitCard from "./WaitCard"
-import { FisherYates, sortCards } from "@utils/commonFunction"
-import VisualizerCard from "./VisualizerCard"
-import { setCardLocal } from "@utils/localStorage"
+import { Box, Button, Card, CardContent, Typography } from "@mui/material"
 import { changeFrequencyById } from "@reducer/cardReducer"
 import {
   errorNotification,
   infoNotification,
   successNotification,
 } from "@reducer/notificationReducer"
+import { FisherYates, sortCards } from "@utils/commonFunction"
+import { setCardLocal } from "@utils/localStorage"
+import PropTypes from "prop-types"
+import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
+import VisualizerCard from "./VisualizerCard"
+import WaitCard from "./WaitCard"
 
 const colorOptionDeault = "#d2dee470"
 
-const MultipleSelectionMode = () => {
+const MultipleSelectionMode = ({ inverse = false }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [expandedCards, setExpandedCards] = useState([])
   const [startGame, setStartGame] = useState(false)
@@ -40,7 +33,11 @@ const MultipleSelectionMode = () => {
   if (!cardList || cardList.length < 3) {
     return (
       <WaitCard
-        Title="Modo selección múltiple"
+        Title={
+          inverse
+            ? "Modo selección múltiple inverso"
+            : "Modo selección múltiple"
+        }
         Body2="Se requiere un mínimo de 3 tarjetas para este modo. Si no ha añadido ninguna tarjeta, dirijase a la sección de 'Gestionar tarjetas'"
       />
     )
@@ -70,7 +67,6 @@ const MultipleSelectionMode = () => {
     let indexB = Math.floor(Math.random() * cards.length)
     while (cards[indexB].id === actualCard.id || indexA === indexB) {
       indexB = Math.floor(Math.random() * cards.length)
-      console.log(indexB)
     }
     const optionArray = FisherYates([cards[indexA], actualCard, cards[indexB]])
     return optionArray
@@ -159,7 +155,9 @@ const MultipleSelectionMode = () => {
   return (
     <Box className="game-mode">
       <Typography className="game-mode__title">
-        Modo selección multiple
+        {inverse
+          ? "Modo selección múltiple inverso"
+          : "Modo selección múltiple"}
       </Typography>
       {!startGame && (
         <Button className="button--primary" onClick={handleStart}>
@@ -183,6 +181,7 @@ const MultipleSelectionMode = () => {
             colorDownArrow={colorDownArrow}
             colorUpArrow={colorUpArrow}
             changeFrequency={changeFrequency}
+            showFront={!inverse}
             cardContent={
               cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
             }
@@ -202,12 +201,7 @@ const MultipleSelectionMode = () => {
             <strong>Elige la opción correcta</strong>
           </Typography>
 
-          <Stack
-            flexDirection={"row"}
-            alignItems={"start"}
-            justifyContent={"center"}
-            gap={2}
-          >
+          <Box className="game-mode__selection-option">
             {optionCard.map((c, index) => (
               <Card
                 key={`option ${index}`}
@@ -217,16 +211,18 @@ const MultipleSelectionMode = () => {
                 sx={{
                   backgroundColor: colorOption[index],
                   cursor: "pointer",
+                  width: "100%",
+                  height: "100%",
                 }}
               >
                 <CardContent padding={1}>
                   <Typography className="game-mode__text">
-                    {c.answer}
+                    {inverse ? c.question : c.answer}
                   </Typography>
                 </CardContent>
               </Card>
             ))}
-          </Stack>
+          </Box>
         </Box>
       )}
     </Box>
@@ -234,7 +230,7 @@ const MultipleSelectionMode = () => {
 }
 
 MultipleSelectionMode.propTypes = {
-  handleNotification: PropTypes.func,
+  inverse: PropTypes.bool,
 }
 
 export default MultipleSelectionMode

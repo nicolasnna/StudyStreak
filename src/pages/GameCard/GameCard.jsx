@@ -6,11 +6,16 @@ import BasicMode from "./components/BasicMode"
 import MultipleSelectionMode from "./components/MultipleSelectionMode"
 
 const buttonRoutes = [
-  { key: 1, label: "Revisión básica", link: "/modos-de-juego/basico" },
+  { key: "basica", label: "Revisión básica", link: "/modos-de-juego/basico" },
   {
-    key: 2,
+    key: "multiple",
     label: "Selección múltiple",
     link: "/modos-de-juego/seleccion-multiple",
+  },
+  {
+    key: "multiple inverso",
+    label: "Selección múltiple inverso",
+    link: "/modos-de-juego/seleccion-multiple-inverso",
   },
 ]
 
@@ -46,8 +51,17 @@ const GameCard = () => {
       </Stack>
 
       <Routes>
-        <Route path="/basico" element={<BasicMode />} />
-        <Route path="/seleccion-multiple" element={<MultipleSelectionMode />} />
+        <Route path={"/basico"} element={<BasicMode />} />
+        <Route
+          path={"/seleccion-multiple"}
+          element={<MultipleSelectionMode key="multiple" />}
+        />
+        <Route
+          path={"/seleccion-multiple-inverso"}
+          element={
+            <MultipleSelectionMode key="multiple-inverse" inverse={true} />
+          }
+        />
       </Routes>
     </Box>
   )

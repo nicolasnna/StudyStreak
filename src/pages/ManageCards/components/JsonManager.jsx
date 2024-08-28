@@ -87,12 +87,20 @@ const JsonManager = () => {
     }
   }
 
-  const handleSaveCards = () => {
+  const handleOverWrittingCards = () => {
     dispatch(setCards(dataUpload))
     setCardLocal(dataUpload)
     setShowUpload(false)
     setDataUpload([])
-    dispatch(successNotification("Se ha subido las tarjetas corectamente"))
+    dispatch(successNotification("Se ha sobrescrito las tarjetas corectamente"))
+  }
+
+  const handleAddCards = () => {
+    dispatch(setCards([...flashCards, ...dataUpload]))
+    setCardLocal([...flashCards, ...dataUpload])
+    setShowUpload(false)
+    setDataUpload([])
+    dispatch(successNotification("Se ha añadido las tarjetas corectamente"))
   }
 
   return (
@@ -146,19 +154,28 @@ const JsonManager = () => {
           </List>
           <Typography align="center" variant="h3">
             Se ha leído {dataUpload.length} tarjetas <br /> ¿Desea{" "}
-            <strong className="accent">importarlos</strong>?
+            <strong className="accent">sobreescribir</strong> o{" "}
+            <strong className="accent">añadirlos</strong>?
           </Typography>
           <Stack
             flexDirection="row"
             alignItems="center"
             justifyContent="center"
+            gap={2}
           >
             <Button
-              className="button--primary json-manager__button"
-              onClick={handleSaveCards}
+              className="button--primary "
+              onClick={handleOverWrittingCards}
               startIcon={<SaveIcon />}
             >
-              <strong>Guardar</strong>
+              <Typography>Sobrescribir</Typography>
+            </Button>
+            <Button
+              className="button--primary "
+              onClick={handleAddCards}
+              startIcon={<SaveIcon />}
+            >
+              <Typography>Añadir</Typography>
             </Button>
           </Stack>
         </Box>
