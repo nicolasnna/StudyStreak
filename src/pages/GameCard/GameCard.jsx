@@ -4,6 +4,7 @@ import { FontSize } from "@utils/constants"
 import { Link, Route, Routes, useLocation } from "react-router-dom"
 import BasicMode from "./components/BasicMode"
 import MultipleSelectionMode from "./components/MultipleSelectionMode"
+import CompetitionBotMode from "./components/CompetitionBotMode"
 
 const buttonRoutes = [
   { key: "basica", label: "Revisión básica", link: "/modos-de-juego/basico" },
@@ -16,6 +17,11 @@ const buttonRoutes = [
     key: "multiple inverso",
     label: "Selección múltiple inverso",
     link: "/modos-de-juego/seleccion-multiple-inverso",
+  },
+  {
+    key: "competencia",
+    label: "Competencia Bot",
+    link: "/modos-de-juego/competencia-vs-bot",
   },
 ]
 
@@ -62,6 +68,7 @@ const GameCard = () => {
             <MultipleSelectionMode key="multiple-inverse" inverse={true} />
           }
         />
+        <Route path="/competencia-vs-bot" element={<CompetitionBotMode />} />
       </Routes>
     </Box>
   )

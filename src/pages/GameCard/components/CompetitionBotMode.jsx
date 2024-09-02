@@ -1,25 +1,17 @@
+import FlashCard from "@components/FlashCard/FlashCard"
 import { Box, Button, Card, CardContent, Typography } from "@mui/material"
-import { changeFrequencyById } from "@reducer/cardReducer"
-import {
-  errorNotification,
-  infoNotification,
-  successNotification,
-} from "@reducer/notificationReducer"
 import { createOption, sortCards } from "@utils/commonFunction"
-import { setCardLocal } from "@utils/localStorage"
-import PropTypes from "prop-types"
-import { useState } from "react"
+import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
-import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 
 const colorOptionDeault = "#d2dee470"
 
-const MultipleSelectionMode = ({ inverse = false }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [expandedCards, setExpandedCards] = useState([])
+const CompetitionBotMode = () => {
   const [startGame, setStartGame] = useState(false)
+  const [expandedCards, setExpandedCards] = useState([])
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [correctIsSelected, setCorrectIsSelected] = useState(false)
   const [optionCard, setOptionCard] = useState([])
   const [colorOption, setColorOption] = useState([
@@ -33,30 +25,10 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   if (!cardList || cardList.length < 3) {
     return (
       <WaitCard
-        Title={
-          inverse
-            ? "Modo selección múltiple inverso"
-            : "Modo selección múltiple"
-        }
+        Title={"Modo competencia contra bots"}
         Body2="Se requiere un mínimo de 3 tarjetas para este modo. Si no ha añadido ninguna tarjeta, dirijase a la sección de 'Gestionar tarjetas'"
       />
     )
-  }
-
-  // Define color of arrows
-  let colorUpArrow = "grey"
-  let colorDownArrow = "grey"
-  if (expandedCards[currentIndex]) {
-    colorUpArrow =
-      cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
-        .revision_frequency === 1
-        ? "green"
-        : "grey"
-    colorDownArrow =
-      cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
-        .revision_frequency === -1
-        ? "red"
-        : "grey"
   }
 
   const handleStart = () => {
@@ -67,49 +39,8 @@ const MultipleSelectionMode = ({ inverse = false }) => {
     setStartGame(true)
   }
 
-  const changeFrequency = (value) => {
-    switch (value) {
-      case 1:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, 1))
-        dispatch(
-          successNotification(
-            "Se ha incrementado la frecuencia de aparición de la tarjeta"
-          )
-        )
-        break
-      case 0:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, 0))
-        dispatch(infoNotification("Volviendo a la frecuencia normal"))
-        break
-      case -1:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, -1))
-        dispatch(
-          successNotification(
-            "Se ha disminuido la frecuencia de aparición de la tarjeta"
-          )
-        )
-        break
-      default:
-        console.error(
-          "Error to specify change Frequency in MultipleSelectionMode.jsx"
-        )
-    }
-    setCardLocal(cardList)
-  }
-
   const handleSelectOption = (e) => {
     const selectId = e.currentTarget.getAttribute("option-value")
-    const selectIndex = e.currentTarget.getAttribute("index-value")
-    let arrayColor = [...colorOption]
-    if (selectId === expandedCards[currentIndex].id) {
-      arrayColor[selectIndex] = "rgb(0,220,0,0.5)"
-      setCorrectIsSelected(true)
-      dispatch(successNotification("Se ha marcado la alternativa correcta"))
-    } else {
-      arrayColor[selectIndex] = "rgb(220,0,0,0.5)"
-      dispatch(errorNotification("Se ha marcado la alternativa incorrecta"))
-    }
-    setColorOption(arrayColor)
   }
 
   const disableNext =
@@ -142,9 +73,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   return (
     <Box className="game-mode">
       <Typography className="game-mode__title">
-        {inverse
-          ? "Modo selección múltiple inverso"
-          : "Modo selección múltiple"}
+        Modo competencia contra bot
       </Typography>
       {!startGame && (
         <Button className="button--primary" onClick={handleStart}>
@@ -153,26 +82,28 @@ const MultipleSelectionMode = ({ inverse = false }) => {
           </Typography>
         </Button>
       )}
-
       {!expandedCards[currentIndex] && startGame && (
         <WaitCard Body1="Barajando tarjetas..." Body2="" />
       )}
-
       {startGame && (
         <Box className="game-mode__content">
+          <Box className="">
+            <Typography className="game-mode__text">
+              Estado del bot: <strong>0</strong> respondidas de
+              <strong> 14</strong>
+            </Typography>
+          </Box>
           <Typography className="game-mode__text">
-            Usa las flechas para ajustar la frecuencia de aparición de la
-            tarjeta.
+            Observa la tarjeta y selecciona la opción acorde con el contenido.
+            <br />
+            Selecciona una alternativa antes de pasar a la siguiente tarjeta.
           </Typography>
-          <VisualizerCard
-            colorDownArrow={colorDownArrow}
-            colorUpArrow={colorUpArrow}
-            changeFrequency={changeFrequency}
-            showFront={!inverse}
+          <FlashCard
             cardContent={
               cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
             }
             disableFlip={true}
+            manageMode={false}
           />
           <CardControl
             currentIndex={currentIndex}
@@ -196,7 +127,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
                 index-value={index}
                 onClick={handleSelectOption}
                 sx={{
-                  backgroundColor: colorOption[index],
+                  backgroundColor: colorOptionDeault,
                   cursor: "pointer",
                   width: "100%",
                   height: "100%",
@@ -204,7 +135,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
               >
                 <CardContent padding={1}>
                   <Typography className="game-mode__text">
-                    {inverse ? c.question : c.answer}
+                    {c.answer}
                   </Typography>
                 </CardContent>
               </Card>
@@ -216,8 +147,6 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   )
 }
 
-MultipleSelectionMode.propTypes = {
-  inverse: PropTypes.bool,
-}
+CompetitionBotMode.propTypes = {}
 
-export default MultipleSelectionMode
+export default CompetitionBotMode
