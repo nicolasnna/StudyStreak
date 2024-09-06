@@ -1,21 +1,24 @@
-import { Box, Button, Stack, Typography } from "@mui/material"
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { Box, Button, Typography } from "@mui/material"
 import { changeFrequencyById } from "@reducer/cardReducer"
+import {
+  reorderBasicMode,
+  setBasicIndex,
+  startBasicGame,
+} from "@reducer/gameReducer"
 import {
   infoNotification,
   successNotification,
 } from "@reducer/notificationReducer"
-import { sortCards } from "@utils/commonFunction"
 import { setCardLocal } from "@utils/localStorage"
+import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 
 const BasicMode = () => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [expandedCards, setExpandedCards] = useState([])
-  const [startGame, setStartGame] = useState(false)
+  const ordererCardList = useSelector((state) => state.game.basic.listCardSort)
+  const currentIndex = useSelector((state) => state.game.basic.currentIndex)
+  const startGame = useSelector((state) => state.game.basic.start)
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
 
@@ -26,37 +29,33 @@ const BasicMode = () => {
   // Define color of arrows
   let colorUpArrow = "grey"
   let colorDownArrow = "grey"
-  if (expandedCards[currentIndex]) {
+  if (ordererCardList[currentIndex]) {
     colorUpArrow =
-      cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
+      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
         .revision_frequency === 1
         ? "green"
         : "grey"
     colorDownArrow =
-      cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
+      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
         .revision_frequency === -1
         ? "red"
         : "grey"
   }
 
-  const disableNext = currentIndex < expandedCards.length - 1 ? false : true
-  const disablePrev = currentIndex > 0 ? false : true
+  const disableNext = currentIndex === ordererCardList.length - 1
+  const disablePrev = currentIndex === 0
 
   const handleStart = () => {
-    const aleatory = sortCards(cardList)
-    setExpandedCards(aleatory)
-    setStartGame(true)
+    dispatch(startBasicGame())
   }
   const handleShuffle = () => {
-    const aleatory = sortCards(cardList)
-    setExpandedCards(aleatory)
-    setCurrentIndex(0)
+    dispatch(reorderBasicMode(cardList))
   }
 
   const changeFrequency = (value) => {
     switch (value) {
       case 1:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, 1))
+        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 1))
         dispatch(
           successNotification(
             "Se ha incrementado la frecuencia de aparición de la tarjeta"
@@ -64,11 +63,11 @@ const BasicMode = () => {
         )
         break
       case 0:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, 0))
+        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 0))
         dispatch(infoNotification("Volviendo a la frecuencia normal"))
         break
       case -1:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, -1))
+        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, -1))
         dispatch(
           successNotification(
             "Se ha disminuido la frecuencia de aparición de la tarjeta"
@@ -83,12 +82,12 @@ const BasicMode = () => {
 
   const handleNext = () => {
     if (!disableNext) {
-      setCurrentIndex(currentIndex + 1)
+      dispatch(setBasicIndex(currentIndex + 1))
     }
   }
   const handlePrev = () => {
     if (!disablePrev) {
-      setCurrentIndex(currentIndex - 1)
+      dispatch(setBasicIndex(currentIndex - 1))
     }
   }
 
@@ -103,11 +102,11 @@ const BasicMode = () => {
         </Button>
       )}
 
-      {!expandedCards[currentIndex] && startGame && (
+      {ordererCardList.length === 0 && startGame && (
         <WaitCard Body1="Barajando tarjetas..." Body2="" />
       )}
 
-      {startGame && (
+      {ordererCardList.length >= 1 && startGame && (
         <Box className="game-mode__content">
           <Typography className="game-mode__text">
             Pulsa en la tarjeta para ver la respuesta. <br />
@@ -119,12 +118,14 @@ const BasicMode = () => {
             colorUpArrow={colorUpArrow}
             changeFrequency={changeFrequency}
             cardContent={
-              cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
+              cardList.filter(
+                (c) => c.id === ordererCardList[currentIndex].id
+              )[0]
             }
           />
           <CardControl
             currentIndex={currentIndex}
-            maxIndex={expandedCards.length}
+            maxIndex={ordererCardList.length - 1}
             handleNext={handleNext}
             handlePrev={handlePrev}
             handleShuffle={handleShuffle}

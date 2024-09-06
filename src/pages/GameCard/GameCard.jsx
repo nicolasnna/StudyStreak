@@ -5,6 +5,9 @@ import { Link, Route, Routes, useLocation } from "react-router-dom"
 import BasicMode from "./components/BasicMode"
 import MultipleSelectionMode from "./components/MultipleSelectionMode"
 import CompetitionBotMode from "./components/CompetitionBotMode"
+import { useDispatch, useSelector } from "react-redux"
+import { useEffect } from "react"
+import { reorderBasicMode, reorderMultipleMode } from "@reducer/gameReducer"
 
 const buttonRoutes = [
   { key: "basica", label: "Revisión básica", link: "/modos-de-juego/basico" },
@@ -27,6 +30,21 @@ const buttonRoutes = [
 
 const GameCard = () => {
   const location = useLocation()
+  const dispatch = useDispatch()
+  const cardList = useSelector((state) => state.card)
+  const gameModeCards = useSelector((state) => state.game)
+
+  useEffect(() => {
+    if (gameModeCards.basic.listCardSort.length === 0) {
+      dispatch(reorderBasicMode(cardList))
+    }
+    if (gameModeCards.multiple.listCardSort.length === 0) {
+      dispatch(reorderMultipleMode(cardList))
+    }
+    if (gameModeCards.multipleInverse.listCardSort.length === 0) {
+      dispatch(reorderMultipleMode(cardList, true))
+    }
+  }, [gameModeCards, dispatch, cardList])
 
   return (
     <Box marginTop={"1em"}>

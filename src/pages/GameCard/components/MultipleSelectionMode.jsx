@@ -1,32 +1,39 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material"
 import { changeFrequencyById } from "@reducer/cardReducer"
 import {
+  reorderMultipleMode,
+  selectOptionMultipleMode,
+  setMultipleIndex,
+  setMultipleInverseIndex,
+  setMultipleInverseSelectCorrectOption,
+  setMultipleSelectCorrectOption,
+  startMultipleGame,
+  startMultipleInverseGame,
+} from "@reducer/gameReducer"
+import {
   errorNotification,
   infoNotification,
   successNotification,
 } from "@reducer/notificationReducer"
-import { createOption, sortCards } from "@utils/commonFunction"
+import { ColorOption } from "@utils/constants"
 import { setCardLocal } from "@utils/localStorage"
 import PropTypes from "prop-types"
-import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 
-const colorOptionDeault = "#d2dee470"
-
 const MultipleSelectionMode = ({ inverse = false }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [expandedCards, setExpandedCards] = useState([])
-  const [startGame, setStartGame] = useState(false)
-  const [correctIsSelected, setCorrectIsSelected] = useState(false)
-  const [optionCard, setOptionCard] = useState([])
-  const [colorOption, setColorOption] = useState([
-    colorOptionDeault,
-    colorOptionDeault,
-    colorOptionDeault,
-  ])
+  const stateGameMode = useSelector((state) =>
+    inverse ? state.game.multipleInverse : state.game.multiple
+  )
+  const startGame = stateGameMode.start
+  const correctIsSelected = stateGameMode.correctSelectList
+  const currentIndex = stateGameMode.currentIndex
+  const ordererCardList = stateGameMode.listCardSort
+  const optionsCard = stateGameMode.optionList
+  const stateOptions = stateGameMode.stateOption
+
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
 
@@ -46,31 +53,27 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   // Define color of arrows
   let colorUpArrow = "grey"
   let colorDownArrow = "grey"
-  if (expandedCards[currentIndex]) {
+  if (ordererCardList[currentIndex]) {
     colorUpArrow =
-      cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
+      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
         .revision_frequency === 1
         ? "green"
         : "grey"
     colorDownArrow =
-      cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
+      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
         .revision_frequency === -1
         ? "red"
         : "grey"
   }
 
   const handleStart = () => {
-    const aleatory = sortCards(cardList)
-    const optionList = createOption(aleatory[currentIndex], cardList)
-    setExpandedCards(aleatory)
-    setOptionCard(optionList)
-    setStartGame(true)
+    dispatch(inverse ? startMultipleInverseGame() : startMultipleGame())
   }
 
   const changeFrequency = (value) => {
     switch (value) {
       case 1:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, 1))
+        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 1))
         dispatch(
           successNotification(
             "Se ha incrementado la frecuencia de aparición de la tarjeta"
@@ -78,11 +81,11 @@ const MultipleSelectionMode = ({ inverse = false }) => {
         )
         break
       case 0:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, 0))
+        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 0))
         dispatch(infoNotification("Volviendo a la frecuencia normal"))
         break
       case -1:
-        dispatch(changeFrequencyById(expandedCards[currentIndex].id, -1))
+        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, -1))
         dispatch(
           successNotification(
             "Se ha disminuido la frecuencia de aparición de la tarjeta"
@@ -100,43 +103,51 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   const handleSelectOption = (e) => {
     const selectId = e.currentTarget.getAttribute("option-value")
     const selectIndex = e.currentTarget.getAttribute("index-value")
-    let arrayColor = [...colorOption]
-    if (selectId === expandedCards[currentIndex].id) {
-      arrayColor[selectIndex] = "rgb(0,220,0,0.5)"
-      setCorrectIsSelected(true)
+    let copyOptions = [...stateOptions[currentIndex]]
+    if (selectId === ordererCardList[currentIndex].id) {
+      copyOptions[selectIndex] = ColorOption.CORRECT
+      const newCorrectList = correctIsSelected.map((state, index) =>
+        index === currentIndex ? true : state
+      )
+      dispatch(
+        inverse
+          ? setMultipleInverseSelectCorrectOption(newCorrectList)
+          : setMultipleSelectCorrectOption(newCorrectList)
+      )
       dispatch(successNotification("Se ha marcado la alternativa correcta"))
     } else {
-      arrayColor[selectIndex] = "rgb(220,0,0,0.5)"
+      copyOptions[selectIndex] = ColorOption.INCORRECT
       dispatch(errorNotification("Se ha marcado la alternativa incorrecta"))
     }
-    setColorOption(arrayColor)
+    dispatch(selectOptionMultipleMode(currentIndex, copyOptions, inverse))
   }
 
-  const disableNext =
-    currentIndex < expandedCards.length - 1 && correctIsSelected ? false : true
-  const disablePrev = currentIndex > 0 ? false : true
+  const disableNext = !(
+    currentIndex < ordererCardList.length - 1 && correctIsSelected[currentIndex]
+  )
+
+  const disablePrev = currentIndex === 0
 
   const handleNext = () => {
     if (!disableNext) {
-      setCurrentIndex(currentIndex + 1)
-      setCorrectIsSelected(false)
-      setOptionCard(createOption(expandedCards[currentIndex + 1], cardList))
-      setColorOption([colorOptionDeault, colorOptionDeault, colorOptionDeault])
+      dispatch(
+        inverse
+          ? setMultipleInverseIndex(currentIndex + 1)
+          : setMultipleIndex(currentIndex + 1)
+      )
     }
   }
   const handlePrev = () => {
     if (!disablePrev) {
-      setCurrentIndex(currentIndex - 1)
-      setOptionCard(createOption(expandedCards[currentIndex - 1], cardList))
-      setColorOption([colorOptionDeault, colorOptionDeault, colorOptionDeault])
+      dispatch(
+        inverse
+          ? setMultipleInverseIndex(currentIndex - 1)
+          : setMultipleIndex(currentIndex - 1)
+      )
     }
   }
   const handleShuffle = () => {
-    const aleatory = sortCards(cardList)
-    setExpandedCards(aleatory)
-    setCurrentIndex(0)
-    setOptionCard(createOption(expandedCards[0], cardList))
-    setColorOption([colorOptionDeault, colorOptionDeault, colorOptionDeault])
+    dispatch(reorderMultipleMode(cardList, inverse))
   }
 
   return (
@@ -154,11 +165,11 @@ const MultipleSelectionMode = ({ inverse = false }) => {
         </Button>
       )}
 
-      {!expandedCards[currentIndex] && startGame && (
+      {!ordererCardList[currentIndex] && startGame && (
         <WaitCard Body1="Barajando tarjetas..." Body2="" />
       )}
 
-      {startGame && (
+      {ordererCardList.length >= 1 && startGame && (
         <Box className="game-mode__content">
           <Typography className="game-mode__text">
             Usa las flechas para ajustar la frecuencia de aparición de la
@@ -170,13 +181,15 @@ const MultipleSelectionMode = ({ inverse = false }) => {
             changeFrequency={changeFrequency}
             showFront={!inverse}
             cardContent={
-              cardList.filter((c) => c.id === expandedCards[currentIndex].id)[0]
+              cardList.filter(
+                (c) => c.id === ordererCardList[currentIndex].id
+              )[0]
             }
             disableFlip={true}
           />
           <CardControl
             currentIndex={currentIndex}
-            maxIndex={expandedCards.length}
+            maxIndex={ordererCardList.length - 1}
             handleNext={handleNext}
             handlePrev={handlePrev}
             handleShuffle={handleShuffle}
@@ -189,14 +202,14 @@ const MultipleSelectionMode = ({ inverse = false }) => {
           </Typography>
 
           <Box className="game-mode__selection-option">
-            {optionCard.map((c, index) => (
+            {optionsCard[currentIndex].map((c, index) => (
               <Card
                 key={`option ${index}`}
                 option-value={c.id}
                 index-value={index}
                 onClick={handleSelectOption}
                 sx={{
-                  backgroundColor: colorOption[index],
+                  backgroundColor: stateOptions[currentIndex][index],
                   cursor: "pointer",
                   width: "100%",
                   height: "100%",

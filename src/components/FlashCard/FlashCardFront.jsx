@@ -1,40 +1,48 @@
-import { Box, Stack, Typography } from '@mui/material'
-import PropTypes from 'prop-types'
-import FlashCardButtons from './FlashCardButtons'
+import { Box, Stack, Typography } from "@mui/material"
+import PropTypes from "prop-types"
+import FlashCardButtons from "./FlashCardButtons"
 
 const FlashCardFront = ({
-  text, 
-  difficulty, 
-  categories, 
-  manageMode, 
-  handleDialog, 
+  text,
+  difficulty,
+  categories,
+  manageMode,
+  handleDialog,
   ChangeFlipped,
-  handleDialogUpdate
+  handleDialogUpdate,
 }) => {
-  const dictDifficulty = {easy: 'Fácil', medium: 'Intermedio', hard:'Difícil'}
+  const dictDifficulty = {
+    easy: "Fácil",
+    medium: "Intermedio",
+    hard: "Difícil",
+  }
 
   return (
-    <Box 
-      className="flash-card__front">
+    <Box className="flash-card__front">
       <FlashCardButtons
         manageMode={manageMode}
         handleDialog={handleDialog}
         ChangeFlipped={ChangeFlipped}
         handleDialogUpdate={handleDialogUpdate}
       >
-        <div className='flash-card__content'>
-          <Stack height={'80%'}>
-            <Typography 
-              variant="body1" 
+        <div className="flash-card__content">
+          <Stack height={"80%"}>
+            <Typography
+              variant="body1"
               sx={{
-                wordWrap: 'break-word'
-              }}>
+                wordWrap: "break-word",
+              }}
+            >
               {text}
             </Typography>
           </Stack>
-          <Stack flexDirection={"row"} gap={3} height={'20%'}>
-            <Typography variant='body2'><strong className='accent--strong'>{dictDifficulty[difficulty]}</strong></Typography>
-            <Typography variant='body2'>{categories}</Typography>
+          <Stack flexDirection={"row"} gap={3} height={"20%"}>
+            <Typography variant="body2">
+              <strong className="accent--strong">
+                {dictDifficulty[difficulty]}
+              </strong>
+            </Typography>
+            <Typography variant="body2">{categories[0]}</Typography>
           </Stack>
         </div>
       </FlashCardButtons>
@@ -45,7 +53,7 @@ const FlashCardFront = ({
 FlashCardFront.propTypes = {
   text: PropTypes.string,
   difficulty: PropTypes.string,
-  categories: PropTypes.string,
+  categories: PropTypes.array,
   manageMode: PropTypes.bool,
   handleDialog: PropTypes.func,
   handleDialogUpdate: PropTypes.func,

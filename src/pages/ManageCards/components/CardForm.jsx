@@ -1,4 +1,14 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material"
 import PropTypes from "prop-types"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -9,15 +19,14 @@ import { successNotification } from "@reducer/notificationReducer"
 import { setCategoryLocal } from "@utils/localStorage"
 import ModalDialog from "@components/ModalDialog"
 
-
 const CardForm = () => {
-  const questionField = useField('')
-  const answerField = useField('')
-  const difficultField = useField('')
-  const tagField = useField('')
+  const questionField = useField("")
+  const answerField = useField("")
+  const difficultField = useField("")
+  const tagField = useField("")
   const dispatch = useDispatch()
-  const categories = useSelector(state => state.category)
-  const [openDialog, setOpenDialog ] = useState(false)
+  const categories = useSelector((state) => state.category)
+  const [openDialog, setOpenDialog] = useState(false)
 
   const cleanField = () => {
     questionField.clean()
@@ -32,7 +41,7 @@ const CardForm = () => {
       question: questionField.value,
       answer: answerField.value,
       difficulty: difficultField.value,
-      tags: tagField.value || []
+      tags: [tagField.value] || [],
     }
     dispatch(createCard(card))
     cleanField()
@@ -49,29 +58,28 @@ const CardForm = () => {
     dispatch(createCategory(newCategory))
     closeDialog()
     dispatch(successNotification(`Se ha creado la categoria "${newCategory}"`))
-  } 
+  }
 
-  const closeDialog = () => {setOpenDialog(false)}
+  const closeDialog = () => {
+    setOpenDialog(false)
+  }
 
   return (
     <Box className="cardform">
-      <Box
-        width={"100%"}
-        height={"100%"}
-      >
+      <Box width={"100%"} height={"100%"}>
         <Typography variant="h2" align="center">
           Crear una nueva tarjeta
         </Typography>
       </Box>
-      <Box 
-        component="form" 
-        flexDirection={"column"} 
-        display="flex" 
+      <Box
+        component="form"
+        flexDirection={"column"}
+        display="flex"
         gap={1}
         width={"100%"}
-        height={"100%"} 
+        height={"100%"}
         onSubmit={createNewCard}
-        >
+      >
         <TextField
           required
           id="question-text"
@@ -83,7 +91,7 @@ const CardForm = () => {
           className="cardform__textfield"
           value={questionField.value}
           onChange={questionField.changeValue}
-          inputProps={{ maxLength: 60, style:{color: '#551aa2'} }}
+          inputProps={{ maxLength: 60, style: { color: "#551aa2" } }}
         />
         <TextField
           id="answer-text"
@@ -93,15 +101,20 @@ const CardForm = () => {
           className="cardform__textfield"
           maxRows={3}
           multiline
-          
           value={answerField.value}
           onChange={answerField.changeValue}
-          inputProps={{ maxLength: 200, style:{color: '#551aa2'}}}
+          inputProps={{ maxLength: 200, style: { color: "#551aa2" } }}
         />
-        <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'} gap={1}>
+        <Stack
+          flexDirection={"row"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          gap={1}
+        >
           <FormControl fullWidth size="small" required>
-            <InputLabel 
-              className="cardform__input-label" id="selector-difficult-label"
+            <InputLabel
+              className="cardform__input-label"
+              id="selector-difficult-label"
             >
               Dificultad
             </InputLabel>
@@ -113,14 +126,15 @@ const CardForm = () => {
               className="cardform__textfield"
               onChange={difficultField.changeValue}
             >
-              <MenuItem value='easy'>Fácil</MenuItem>
-              <MenuItem value='medium'>Medio</MenuItem>
-              <MenuItem value='hard'>Difícil</MenuItem>
+              <MenuItem value="easy">Fácil</MenuItem>
+              <MenuItem value="medium">Medio</MenuItem>
+              <MenuItem value="hard">Difícil</MenuItem>
             </Select>
           </FormControl>
-          <FormControl fullWidth size="small" >
-            <InputLabel 
-              className="cardform__input-label" id="selector-tag-label"
+          <FormControl fullWidth size="small">
+            <InputLabel
+              className="cardform__input-label"
+              id="selector-tag-label"
             >
               Categoría
             </InputLabel>
@@ -131,11 +145,15 @@ const CardForm = () => {
               className="cardform__textfield"
               value={tagField.value}
               onChange={tagField.changeValue}
-            > 
-              {categories.map(c => (<MenuItem key={c} value={c}>{c}</MenuItem>))}
+            >
+              {categories.map((c) => (
+                <MenuItem key={c} value={c}>
+                  {c}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
-          <Button 
+          <Button
             className="button--primary cardform__button--category"
             onClick={() => setOpenDialog(true)}
           >
@@ -148,7 +166,10 @@ const CardForm = () => {
               <strong>Guardar</strong>
             </Typography>
           </Button>
-          <Button className="button--secondary cardform__button" onClick={cleanField}>
+          <Button
+            className="button--secondary cardform__button"
+            onClick={cleanField}
+          >
             <Typography variant="body1">
               <strong>Limpiar</strong>
             </Typography>
@@ -173,13 +194,12 @@ const CardForm = () => {
           size="small"
         />
       </ModalDialog>
-
     </Box>
   )
 }
 
 CardForm.propTypes = {
-  handleNotification: PropTypes.func
+  handleNotification: PropTypes.func,
 }
 
 export default CardForm
