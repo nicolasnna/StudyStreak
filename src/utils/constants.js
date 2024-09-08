@@ -29,3 +29,9 @@ export const ColorOption = Object.freeze({
   CORRECT: "rgb(0,220,0,0.5)",
   INCORRECT: "rgb(220,0,0,0.5)",
 })
+
+export const BotLevelProb = Object.freeze({
+  0: 0.3,
+  1: 0.5,
+  2: 0.7,
+})

@@ -1,3 +1,5 @@
+import { BotLevelProb } from "./constants"
+
 export const FisherYates = (array) => {
   let newArray = array.slice()
 
@@ -11,6 +13,12 @@ export const FisherYates = (array) => {
   }
 
   return newArray.filter((content) => content !== undefined)
+}
+
+export const calculateBotAnswer = (botLevel) => {
+  const percentage = BotLevelProb[botLevel]
+  const isCorrectAnswer = percentage >= Math.random()
+  return isCorrectAnswer ? 1 : 0
 }
 
 export const sortCards = (card) => {

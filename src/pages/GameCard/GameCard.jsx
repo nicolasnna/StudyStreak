@@ -1,13 +1,13 @@
 import Header from "@components/Header"
 import { Box, Button, Stack, Typography } from "@mui/material"
+import { reorderGameMode } from "@reducer/gameReducer"
 import { FontSize } from "@utils/constants"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Link, Route, Routes, useLocation } from "react-router-dom"
 import BasicMode from "./components/BasicMode"
-import MultipleSelectionMode from "./components/MultipleSelectionMode"
 import CompetitionBotMode from "./components/CompetitionBotMode"
-import { useDispatch, useSelector } from "react-redux"
-import { useEffect } from "react"
-import { reorderBasicMode, reorderMultipleMode } from "@reducer/gameReducer"
+import MultipleSelectionMode from "./components/MultipleSelectionMode"
 
 const buttonRoutes = [
   { key: "basica", label: "Revisión básica", link: "/modos-de-juego/basico" },
@@ -36,13 +36,16 @@ const GameCard = () => {
 
   useEffect(() => {
     if (gameModeCards.basic.listCardSort.length === 0) {
-      dispatch(reorderBasicMode(cardList))
+      dispatch(reorderGameMode(cardList, "basic"))
     }
     if (gameModeCards.multiple.listCardSort.length === 0) {
-      dispatch(reorderMultipleMode(cardList))
+      dispatch(reorderGameMode(cardList, "multiple"))
     }
     if (gameModeCards.multipleInverse.listCardSort.length === 0) {
-      dispatch(reorderMultipleMode(cardList, true))
+      dispatch(reorderGameMode(cardList, "multipleInverse"))
+    }
+    if (gameModeCards.vsbot.listCardSort.length === 0) {
+      dispatch(reorderGameMode(cardList, "vsbot"))
     }
   }, [gameModeCards, dispatch, cardList])
 

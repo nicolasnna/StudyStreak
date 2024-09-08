@@ -1,24 +1,19 @@
 import { Box, Button, Typography } from "@mui/material"
-import { changeFrequencyById } from "@reducer/cardReducer"
 import {
-  reorderBasicMode,
-  setBasicIndex,
-  startBasicGame,
+  reorderGameMode,
+  setCurrentIndex,
+  setStartGame,
 } from "@reducer/gameReducer"
-import {
-  infoNotification,
-  successNotification,
-} from "@reducer/notificationReducer"
-import { setCardLocal } from "@utils/localStorage"
 import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 
 const BasicMode = () => {
-  const ordererCardList = useSelector((state) => state.game.basic.listCardSort)
-  const currentIndex = useSelector((state) => state.game.basic.currentIndex)
-  const startGame = useSelector((state) => state.game.basic.start)
+  const stateGameMode = useSelector((state) => state.game.basic)
+  const ordererCardList = stateGameMode.listCardSort
+  const currentIndex = stateGameMode.currentIndex
+  const startGame = stateGameMode.start
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
 
@@ -26,68 +21,24 @@ const BasicMode = () => {
     return <WaitCard Title="Modo revisión básica" />
   }
 
-  // Define color of arrows
-  let colorUpArrow = "grey"
-  let colorDownArrow = "grey"
-  if (ordererCardList[currentIndex]) {
-    colorUpArrow =
-      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
-        .revision_frequency === 1
-        ? "green"
-        : "grey"
-    colorDownArrow =
-      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
-        .revision_frequency === -1
-        ? "red"
-        : "grey"
-  }
-
   const disableNext = currentIndex === ordererCardList.length - 1
   const disablePrev = currentIndex === 0
 
   const handleStart = () => {
-    dispatch(startBasicGame())
+    dispatch(setStartGame({ mode: "basic" }))
   }
   const handleShuffle = () => {
-    dispatch(reorderBasicMode(cardList))
-  }
-
-  const changeFrequency = (value) => {
-    switch (value) {
-      case 1:
-        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 1))
-        dispatch(
-          successNotification(
-            "Se ha incrementado la frecuencia de aparición de la tarjeta"
-          )
-        )
-        break
-      case 0:
-        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 0))
-        dispatch(infoNotification("Volviendo a la frecuencia normal"))
-        break
-      case -1:
-        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, -1))
-        dispatch(
-          successNotification(
-            "Se ha disminuido la frecuencia de aparición de la tarjeta"
-          )
-        )
-        break
-      default:
-        console.error("Error to specify change Frequency in ModeBasicGame.jsx")
-    }
-    setCardLocal(cardList)
+    dispatch(reorderGameMode(cardList, "basic"))
   }
 
   const handleNext = () => {
     if (!disableNext) {
-      dispatch(setBasicIndex(currentIndex + 1))
+      dispatch(setCurrentIndex({ mode: "basic", index: currentIndex + 1 }))
     }
   }
   const handlePrev = () => {
     if (!disablePrev) {
-      dispatch(setBasicIndex(currentIndex - 1))
+      dispatch(setCurrentIndex({ mode: "basic", index: currentIndex - 1 }))
     }
   }
 
@@ -114,9 +65,6 @@ const BasicMode = () => {
             tarjeta.
           </Typography>
           <VisualizerCard
-            colorDownArrow={colorDownArrow}
-            colorUpArrow={colorUpArrow}
-            changeFrequency={changeFrequency}
             cardContent={
               cardList.filter(
                 (c) => c.id === ordererCardList[currentIndex].id

@@ -17,7 +17,7 @@ const CardControl = ({
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <Typography variant="body1">
+        <Typography className="card-control__enumeration-card">
           {currentIndex + 1} / {maxIndex + 1}
         </Typography>
       </Stack>

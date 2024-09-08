@@ -1,22 +1,16 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material"
-import { changeFrequencyById } from "@reducer/cardReducer"
 import {
-  reorderMultipleMode,
+  reorderGameMode,
   selectOptionMultipleMode,
-  setMultipleIndex,
-  setMultipleInverseIndex,
-  setMultipleInverseSelectCorrectOption,
-  setMultipleSelectCorrectOption,
-  startMultipleGame,
-  startMultipleInverseGame,
+  setCurrentIndex,
+  setSelectCorrectOption,
+  setStartGame,
 } from "@reducer/gameReducer"
 import {
   errorNotification,
-  infoNotification,
   successNotification,
 } from "@reducer/notificationReducer"
 import { ColorOption } from "@utils/constants"
-import { setCardLocal } from "@utils/localStorage"
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
@@ -36,6 +30,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
 
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
+  const modeLabel = inverse ? "multipleInverse" : "multiple"
 
   if (!cardList || cardList.length < 3) {
     return (
@@ -45,59 +40,14 @@ const MultipleSelectionMode = ({ inverse = false }) => {
             ? "Modo selección múltiple inverso"
             : "Modo selección múltiple"
         }
-        Body2="Se requiere un mínimo de 3 tarjetas para este modo. Si no ha añadido ninguna tarjeta, dirijase a la sección de 'Gestionar tarjetas'"
+        Body2="Se requiere un mínimo de 3 tarjetas para este modo."
+        Body3="Si no ha añadido ninguna tarjeta, dirijase a la sección de 'Gestionar tarjetas'"
       />
     )
   }
 
-  // Define color of arrows
-  let colorUpArrow = "grey"
-  let colorDownArrow = "grey"
-  if (ordererCardList[currentIndex]) {
-    colorUpArrow =
-      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
-        .revision_frequency === 1
-        ? "green"
-        : "grey"
-    colorDownArrow =
-      cardList.filter((c) => c.id === ordererCardList[currentIndex].id)[0]
-        .revision_frequency === -1
-        ? "red"
-        : "grey"
-  }
-
   const handleStart = () => {
-    dispatch(inverse ? startMultipleInverseGame() : startMultipleGame())
-  }
-
-  const changeFrequency = (value) => {
-    switch (value) {
-      case 1:
-        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 1))
-        dispatch(
-          successNotification(
-            "Se ha incrementado la frecuencia de aparición de la tarjeta"
-          )
-        )
-        break
-      case 0:
-        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, 0))
-        dispatch(infoNotification("Volviendo a la frecuencia normal"))
-        break
-      case -1:
-        dispatch(changeFrequencyById(ordererCardList[currentIndex].id, -1))
-        dispatch(
-          successNotification(
-            "Se ha disminuido la frecuencia de aparición de la tarjeta"
-          )
-        )
-        break
-      default:
-        console.error(
-          "Error to specify change Frequency in MultipleSelectionMode.jsx"
-        )
-    }
-    setCardLocal(cardList)
+    dispatch(setStartGame({ mode: modeLabel }))
   }
 
   const handleSelectOption = (e) => {
@@ -110,16 +60,17 @@ const MultipleSelectionMode = ({ inverse = false }) => {
         index === currentIndex ? true : state
       )
       dispatch(
-        inverse
-          ? setMultipleInverseSelectCorrectOption(newCorrectList)
-          : setMultipleSelectCorrectOption(newCorrectList)
+        setSelectCorrectOption({
+          mode: modeLabel,
+          selectCorrectList: newCorrectList,
+        })
       )
       dispatch(successNotification("Se ha marcado la alternativa correcta"))
     } else {
       copyOptions[selectIndex] = ColorOption.INCORRECT
       dispatch(errorNotification("Se ha marcado la alternativa incorrecta"))
     }
-    dispatch(selectOptionMultipleMode(currentIndex, copyOptions, inverse))
+    dispatch(selectOptionMultipleMode(currentIndex, copyOptions, modeLabel))
   }
 
   const disableNext = !(
@@ -130,24 +81,16 @@ const MultipleSelectionMode = ({ inverse = false }) => {
 
   const handleNext = () => {
     if (!disableNext) {
-      dispatch(
-        inverse
-          ? setMultipleInverseIndex(currentIndex + 1)
-          : setMultipleIndex(currentIndex + 1)
-      )
+      dispatch(setCurrentIndex({ mode: modeLabel, index: currentIndex + 1 }))
     }
   }
   const handlePrev = () => {
     if (!disablePrev) {
-      dispatch(
-        inverse
-          ? setMultipleInverseIndex(currentIndex - 1)
-          : setMultipleIndex(currentIndex - 1)
-      )
+      dispatch(setCurrentIndex({ mode: modeLabel, index: currentIndex - 1 }))
     }
   }
   const handleShuffle = () => {
-    dispatch(reorderMultipleMode(cardList, inverse))
+    dispatch(reorderGameMode(cardList, modeLabel))
   }
 
   return (
@@ -176,9 +119,6 @@ const MultipleSelectionMode = ({ inverse = false }) => {
             tarjeta.
           </Typography>
           <VisualizerCard
-            colorDownArrow={colorDownArrow}
-            colorUpArrow={colorUpArrow}
-            changeFrequency={changeFrequency}
             showFront={!inverse}
             cardContent={
               cardList.filter(

@@ -3,31 +3,41 @@ import PropTypes from "prop-types"
 import FlashCard from "@components/FlashCard/FlashCard"
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
+import { changeFrequency } from "@reducer/cardReducer"
+import { useDispatch, useSelector } from "react-redux"
 
 const VisualizerCard = ({
-  colorDownArrow = "grey",
-  colorUpArrow = "grey",
   disableFlip = false,
   showFront = true,
-  changeFrequency,
   cardContent,
 }) => {
+  const cardList = useSelector((state) => state.card)
+  const dispatch = useDispatch()
   const ClickUpArrow = (e) => {
     e.preventDefault()
     if (cardContent.revision_frequency !== 1) {
-      changeFrequency(1)
+      dispatch(changeFrequency(1, cardContent.id, cardList))
     } else {
-      changeFrequency(0)
+      dispatch(changeFrequency(0, cardContent.id, cardList))
     }
   }
   const ClickDownArrow = (e) => {
     e.preventDefault()
     if (cardContent.revision_frequency !== -1) {
-      changeFrequency(-1)
+      dispatch(changeFrequency(-1, cardContent.id, cardList))
     } else {
-      changeFrequency(0)
+      dispatch(changeFrequency(0, cardContent.id, cardList))
     }
   }
+
+  const UpArrow =
+    cardList.filter((c) => c.id === cardContent.id)[0].revision_frequency === 1
+      ? "green"
+      : "grey"
+  const DownArrow =
+    cardList.filter((c) => c.id === cardContent.id)[0].revision_frequency === -1
+      ? "red"
+      : "grey"
 
   return (
     <Stack
@@ -42,7 +52,7 @@ const VisualizerCard = ({
             sx={{
               width: "3em",
               height: "3em",
-              color: colorDownArrow,
+              color: DownArrow,
             }}
           />
         </IconButton>
@@ -58,7 +68,7 @@ const VisualizerCard = ({
             sx={{
               width: "3em",
               height: "3em",
-              color: colorUpArrow,
+              color: UpArrow,
             }}
           />
         </IconButton>

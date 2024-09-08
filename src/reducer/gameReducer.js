@@ -2,164 +2,124 @@ import { createSlice } from "@reduxjs/toolkit"
 import { createOption, sortCards } from "@utils/commonFunction"
 import { ColorOption } from "@utils/constants"
 
+function getInitialState() {
+  return {
+    start: false,
+    listCardSort: [],
+    currentIndex: 0,
+    optionList: [],
+    stateOption: [],
+    correctSelectList: [],
+  }
+}
+
 const initialState = {
-  basic: {
-    start: false,
-    listCardSort: [],
-    currentIndex: 0,
-  },
-  multiple: {
-    start: false,
-    listCardSort: [],
-    currentIndex: 0,
-    optionList: [],
-    stateOption: [],
-    correctSelectList: [],
-  },
-  multipleInverse: {
-    start: false,
-    listCardSort: [],
-    currentIndex: 0,
-    optionList: [],
-    stateOption: [],
-    correctSelectList: [],
-  },
+  basic: getInitialState(),
+  multiple: getInitialState(),
+  multipleInverse: getInitialState(),
+  vsbot: { ...getInitialState(), botLevel: -1, correctBotAnswer: 0 },
 }
 
 const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    startBasicGame(state) {
-      state.basic.start = true
+    setStartGame(state, action) {
+      const { mode } = action.payload
+      state[mode].start = true
     },
-    setBasicListCard(state, action) {
-      state.basic.listCardSort = action.payload
+    setListCard(state, action) {
+      const { mode, listCardSort } = action.payload
+      state[mode].listCardSort = listCardSort
     },
-    setBasicIndex(state, action) {
-      state.basic.currentIndex = action.payload
+    setCurrentIndex(state, action) {
+      const { mode, index } = action.payload
+      state[mode].currentIndex = index
     },
-    startMultipleGame(state) {
-      state.multiple.start = true
+    setOptionList(state, action) {
+      const { mode, optionList } = action.payload
+      state[mode].optionList = optionList
     },
-    setMultipleListCard(state, action) {
-      state.multiple.listCardSort = action.payload
+    setStateOption(state, action) {
+      const { mode, stateOption } = action.payload
+      state[mode].stateOption = stateOption
     },
-    setMultipleIndex(state, action) {
-      state.multiple.currentIndex = action.payload
+    changeStateOption(state, action) {
+      const { mode, index, newStateOption } = action.payload
+      state[mode].stateOption[index] = newStateOption
     },
-    setMultipleOptionList(state, action) {
-      state.multiple.optionList = action.payload
+    setSelectCorrectOption(state, action) {
+      const { mode, selectCorrectList } = action.payload
+      state[mode].correctSelectList = selectCorrectList
     },
-    changeMultipleStateOption(state, action) {
-      const index = action.payload.index
-      state.multiple.stateOption[index] = action.payload.stateOption
+    setBotLevel(state, action) {
+      const { mode, level } = action.payload
+      if (state[mode].botLevel !== undefined) {
+        state[mode].botLevel = level
+      }
     },
-    setMultipleStateOption(state, action) {
-      state.multiple.stateOption = action.payload
-    },
-    setMultipleSelectCorrectOption(state, action) {
-      state.multiple.correctSelectList = action.payload
-    },
-    startMultipleInverseGame(state) {
-      state.multipleInverse.start = true
-    },
-    setMultipleInverseListCard(state, action) {
-      state.multipleInverse.listCardSort = action.payload
-    },
-    setMultipleInverseIndex(state, action) {
-      state.multipleInverse.currentIndex = action.payload
-    },
-    setMultipleInverseOptionList(state, action) {
-      state.multipleInverse.optionList = action.payload
-    },
-    changeMultipleInverseStateOption(state, action) {
-      const index = action.payload.index
-      state.multipleInverse.stateOption[index] = action.payload.stateOption
-    },
-    setMultipleInverseStateOption(state, action) {
-      state.multipleInverse.stateOption = action.payload
-    },
-    setMultipleInverseSelectCorrectOption(state, action) {
-      state.multipleInverse.correctSelectList = action.payload
+    setCorrectBotAnswer(state, action) {
+      const { mode, correctAnswer } = action.payload
+      if (state[mode].correctBotAnswer !== undefined) {
+        state[mode].correctBotAnswer = correctAnswer
+      }
     },
   },
 })
 
 export const {
-  startBasicGame,
-  setBasicListCard,
-  setBasicIndex,
-  startMultipleGame,
-  setMultipleListCard,
-  setMultipleIndex,
-  setMultipleOptionList,
-  changeMultipleStateOption,
-  setMultipleStateOption,
-  setMultipleSelectCorrectOption,
-  startMultipleInverseGame,
-  setMultipleInverseListCard,
-  setMultipleInverseIndex,
-  setMultipleInverseOptionList,
-  changeMultipleInverseStateOption,
-  setMultipleInverseStateOption,
-  setMultipleInverseSelectCorrectOption,
+  setStartGame,
+  setListCard,
+  setCurrentIndex,
+  setOptionList,
+  setStateOption,
+  changeStateOption,
+  setSelectCorrectOption,
+  setBotLevel,
+  setCorrectBotAnswer,
 } = gameSlice.actions
 
-export const reorderBasicMode = (listCard) => {
-  return async (dispatch) => {
-    const OrdererCard = sortCards(listCard)
-    dispatch(setBasicListCard(OrdererCard))
-    dispatch(setBasicIndex(0))
-  }
+export const reorderGameMode = (listCard, mode) => async (dispatch) => {
+  const orderedCards = sortCards(listCard)
+  const options = orderedCards.map((card) => createOption(card, listCard))
+  const stateOptions = Array.from({ length: orderedCards.length }, () => [
+    ColorOption.DEFAULT,
+    ColorOption.DEFAULT,
+    ColorOption.DEFAULT,
+  ])
+  const correctSelectList = Array(orderedCards.length).fill(false)
+
+  dispatch(setListCard({ mode: mode, listCardSort: orderedCards }))
+  dispatch(setCurrentIndex({ mode: mode, index: 0 }))
+  dispatch(setOptionList({ mode: mode, optionList: options }))
+  dispatch(setStateOption({ mode: mode, stateOption: stateOptions }))
+  dispatch(
+    setSelectCorrectOption({
+      mode: mode,
+      selectCorrectList: correctSelectList,
+    })
+  )
 }
 
-export const reorderMultipleMode = (listCard, inverse = false) => {
+export const resetBot = (mode) => {
   return async (dispatch) => {
-    const OrdererCard = sortCards(listCard)
-    const ListOptions = OrdererCard.map((oc) => createOption(oc, listCard))
-    const stateOptions = Array.from({ length: OrdererCard.length }, () => [
-      ColorOption.DEFAULT,
-      ColorOption.DEFAULT,
-      ColorOption.DEFAULT,
-    ])
-    if (inverse) {
-      dispatch(setMultipleInverseListCard(OrdererCard))
-      dispatch(setMultipleInverseIndex(0))
-      dispatch(setMultipleInverseOptionList(ListOptions))
-      dispatch(setMultipleInverseStateOption(stateOptions))
-      dispatch(
-        setMultipleInverseSelectCorrectOption(
-          Array(OrdererCard.length).fill(false)
-        )
-      )
-    } else {
-      dispatch(setMultipleListCard(OrdererCard))
-      dispatch(setMultipleIndex(0))
-      dispatch(setMultipleOptionList(ListOptions))
-      dispatch(setMultipleStateOption(stateOptions))
-      dispatch(
-        setMultipleSelectCorrectOption(Array(OrdererCard.length).fill(false))
-      )
-    }
+    dispatch(setBotLevel({ mode: mode, level: -1 }))
+    dispatch(setCorrectBotAnswer({ mode: mode, correctAnswer: 0 }))
   }
 }
 
 export const selectOptionMultipleMode = (
   indexListOptions,
   newOptions,
-  inverse = false
+  mode
 ) => {
   return async (dispatch) => {
     const command = {
+      mode: mode,
       index: indexListOptions,
-      stateOption: newOptions,
+      newStateOption: newOptions,
     }
-    dispatch(
-      inverse
-        ? changeMultipleInverseStateOption(command)
-        : changeMultipleStateOption(command)
-    )
+    dispatch(changeStateOption(command))
   }
 }
 
