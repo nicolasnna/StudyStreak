@@ -126,7 +126,7 @@ const CompetitionBotMode = () => {
   return (
     <Box className="game-mode">
       <Typography className="game-mode__title">
-        {showResult ? "Resultados del juego" : "Modo competencia conta bot"}
+        {showResult ? "Resultados del juego" : "Modo competencia contra bot"}
       </Typography>
       {!startGame && (
         <Button className="button--primary" onClick={handleStart}>

@@ -8,6 +8,8 @@ import { Link, Route, Routes, useLocation } from "react-router-dom"
 import BasicMode from "./components/BasicMode"
 import CompetitionBotMode from "./components/CompetitionBotMode"
 import MultipleSelectionMode from "./components/MultipleSelectionMode"
+import HomeMode from "./components/HomeMode"
+import PageNotFound from "@pages/PageNotFound/PageNotFound"
 
 const buttonRoutes = [
   { key: "basica", label: "Revisión básica", link: "/modos-de-juego/basico" },
@@ -78,6 +80,7 @@ const GameCard = () => {
       </Stack>
 
       <Routes>
+        <Route path={"/"} element={<HomeMode />} />
         <Route path={"/basico"} element={<BasicMode />} />
         <Route
           path={"/seleccion-multiple"}
@@ -90,6 +93,15 @@ const GameCard = () => {
           }
         />
         <Route path="/competencia-vs-bot" element={<CompetitionBotMode />} />
+        <Route
+          path="*"
+          element={
+            <PageNotFound
+              labelError="Modo de juego no encontrado"
+              subtitle="Selecciona uno de los modos de juegos disponibles"
+            />
+          }
+        />
       </Routes>
     </Box>
   )
