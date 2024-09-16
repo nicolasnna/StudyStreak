@@ -18,12 +18,29 @@
     color: $text
     margin-bottom: 0.5em
 
+  &__selection
+    border-radius: 5px
+    background-color: $background
+    color: $primary !important
+    
+    &.Mui-focused fieldset 
+      border-color: blue !important // Cambia el color del borde 
+    
+    & .MuiSelect-icon 
+      color: $primary
+
+    &__item
+      & label
+      color: $primary !important
+
+      &:hover
+        background-color: $background-secondary !important
+
   &__textfield
     border-radius: 5px
     background-color: $background
 
     .MuiOutlinedInput-root 
-
       &:hover fieldset 
         border-color: $primary !important // Cambia el color del borde cuando está en hover
       &.Mui-focused fieldset 
@@ -35,13 +52,13 @@
         border-color: blue !important // Cambia el color del borde cuando está enfocado
 
     & label
-      color: $primary
+      color: $text
 
     & .MuiSelect-icon 
       color: $primary
 
   &__input-label
-    color: $primary !important
+    color: $text !important
 
   &__button
     width: 8em
@@ -51,4 +68,3 @@
       width: 15em 
       height: 2.8em
     
-

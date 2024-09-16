@@ -71,7 +71,7 @@ const FlashCard = ({
         handleAcept={deleteFlashCard}
         focusInverseButton={true}
       >
-        <DialogContentText>
+        <DialogContentText className="dialog-modal__content__text">
           Desea eliminar la tarjeta: <br />
           <strong>{cardContent.question}</strong> <br />
           {cardContent.answer}

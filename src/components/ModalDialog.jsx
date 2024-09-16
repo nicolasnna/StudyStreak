@@ -1,21 +1,31 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
-import PropTypes from 'prop-types'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material"
+import PropTypes from "prop-types"
 
 const ModalDialog = ({
-  children = <></>, 
+  children = <></>,
   focusInverseButton = false,
   title = "",
-  handleOpen = false, 
-  handleClose = () => {}, 
+  handleOpen = false,
+  handleClose = () => {},
   handleAcept = () => {},
   labelCancelButton = "Cancelar",
   labelAcceptButton = "Aceptar",
-  component = '',
-  handleSubmit = () => {}
+  component = "",
+  handleSubmit = () => {},
 }) => {
-  const variantCancel = focusInverseButton ? "contained" : "outlined"
-  const variantAccept = focusInverseButton ? "outlined" : "contained"
-  const typeButtonAccept = component === 'form' ? 'submit' : 'button'
+  const variantAccept = focusInverseButton
+    ? "button--secondary"
+    : "button--primary"
+  const variantCancel = focusInverseButton
+    ? "button--primary"
+    : "button--secondary"
+  const typeButtonAccept = component === "form" ? "submit" : "button"
 
   return (
     <Dialog
@@ -23,18 +33,19 @@ const ModalDialog = ({
       onClose={handleClose}
       component={component}
       onSubmit={handleSubmit}
+      className="dialog-modal"
     >
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
+      <DialogTitle className="dialog-modal__title">{title}</DialogTitle>
+      <DialogContent className="dialog-modal__content">
         {children}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} variant={variantCancel}>
+      <DialogActions className="dialog-modal__actions">
+        <Button onClick={handleClose} className={variantCancel}>
           {labelCancelButton}
         </Button>
-        <Button 
-          onClick={handleAcept}  
-          variant={variantAccept}
+        <Button
+          onClick={handleAcept}
+          className={variantAccept}
           type={typeButtonAccept}
         >
           {labelAcceptButton}
@@ -54,7 +65,7 @@ ModalDialog.propTypes = {
   labelAcceptButton: PropTypes.string,
   labelCancelButton: PropTypes.string,
   component: PropTypes.string,
-  handleSubmit: PropTypes.func
+  handleSubmit: PropTypes.func,
 }
 
 export default ModalDialog

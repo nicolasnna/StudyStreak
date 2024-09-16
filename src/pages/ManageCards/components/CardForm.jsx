@@ -123,12 +123,18 @@ const CardForm = () => {
               id="selector-difficult"
               label="Dificultad"
               value={difficultField.value}
-              className="cardform__textfield"
+              className="cardform__selection"
               onChange={difficultField.changeValue}
             >
-              <MenuItem value="easy">Fácil</MenuItem>
-              <MenuItem value="medium">Medio</MenuItem>
-              <MenuItem value="hard">Difícil</MenuItem>
+              <MenuItem className="cardform__selection__item" value="easy">
+                Fácil
+              </MenuItem>
+              <MenuItem className="cardform__selection__item" value="medium">
+                Medio
+              </MenuItem>
+              <MenuItem className="cardform__selection__item" value="hard">
+                Difícil
+              </MenuItem>
             </Select>
           </FormControl>
           <FormControl fullWidth size="small">
@@ -142,12 +148,16 @@ const CardForm = () => {
               labelId="selector-tag-label"
               id="selector-tag"
               label="Categoría"
-              className="cardform__textfield"
+              className="cardform__selection"
               value={tagField.value}
               onChange={tagField.changeValue}
             >
               {categories.map((c) => (
-                <MenuItem key={c} value={c}>
+                <MenuItem
+                  className="cardform__selection__item"
+                  key={c}
+                  value={c}
+                >
                   {c}
                 </MenuItem>
               ))}
@@ -192,6 +202,8 @@ const CardForm = () => {
           type="text"
           margin="dense"
           size="small"
+          className="cardform__textfield"
+          inputProps={{ style: { color: "#551aa2" } }}
         />
       </ModalDialog>
     </Box>

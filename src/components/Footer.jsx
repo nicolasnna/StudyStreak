@@ -28,6 +28,11 @@ const Footer = (props) => {
           <GitHubIcon />
         </a>
       </Box>
+      <img
+        className="footer__icon"
+        src="/logo full without bg.png"
+        alt="logo web"
+      />
     </Box>
   )
 }
