@@ -3,6 +3,7 @@ import cardReducer from "./cardReducer"
 import categoryReducer from "./categoryReducer"
 import notificationReducer from "./notificationReducer"
 import gameReducer from "./gameReducer"
+import stadisticReducer from "./stadisticReducer"
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     category: categoryReducer,
     notification: notificationReducer,
     game: gameReducer,
+    stadistic: stadisticReducer,
   },
 })
 
