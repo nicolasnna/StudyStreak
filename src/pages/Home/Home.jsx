@@ -10,7 +10,12 @@ const Home = (props) => {
       <Header Title="Study Streak" SubTitle="Mejora tus sesiones de estudio" />
       <Box className="home__card-links">
         {CardLinkContent.map((c) => (
-          <CardLink key={c.key} {...c} />
+          <CardLink
+            key={c.key}
+            title={c.title}
+            urlLink={c.urlLink}
+            contentText={c.contentText}
+          />
         ))}
       </Box>
     </Box>

@@ -37,16 +37,22 @@ const GameCard = () => {
   const gameModeCards = useSelector((state) => state.game)
 
   useEffect(() => {
-    if (gameModeCards.basic.listCardSort.length === 0) {
+    if (gameModeCards.basic.listCardSort.length === 0 && cardList.length >= 3) {
       dispatch(reorderGameMode(cardList, "basic"))
     }
-    if (gameModeCards.multiple.listCardSort.length === 0) {
+    if (
+      gameModeCards.multiple.listCardSort.length === 0 &&
+      cardList.length >= 3
+    ) {
       dispatch(reorderGameMode(cardList, "multiple"))
     }
-    if (gameModeCards.multipleInverse.listCardSort.length === 0) {
+    if (
+      gameModeCards.multipleInverse.listCardSort.length === 0 &&
+      cardList.length >= 3
+    ) {
       dispatch(reorderGameMode(cardList, "multipleInverse"))
     }
-    if (gameModeCards.vsbot.listCardSort.length === 0) {
+    if (gameModeCards.vsbot.listCardSort.length === 0 && cardList.length >= 3) {
       dispatch(reorderGameMode(cardList, "vsbot"))
     }
   }, [gameModeCards, dispatch, cardList])

@@ -8,7 +8,12 @@ const HomeMode = (props) => {
   return (
     <Box className="home-mode-game">
       {CardLinkGameMode.map((c) => (
-        <CardLink key={c.key} {...c} />
+        <CardLink
+          key={c.key}
+          title={c.title}
+          contentText={c.contentText}
+          urlLink={c.urlLink}
+        />
       ))}
     </Box>
   )

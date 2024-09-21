@@ -20,7 +20,7 @@ const WaitCard = ({
       <Typography variant="h3" marginBottom={2}>
         {Title}
       </Typography>
-      <CircularProgress />
+      <CircularProgress size="4rem" />
       <Typography variant="body1" fontSize={20}>
         <strong>{Body1}</strong>
       </Typography>

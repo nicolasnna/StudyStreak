@@ -1,3 +1,5 @@
+import ModalDialog from "@components/ModalDialog"
+import useField from "@hooks/useField"
 import {
   FormControl,
   InputLabel,
@@ -6,12 +8,11 @@ import {
   Stack,
   TextField,
 } from "@mui/material"
-import PropTypes from "prop-types"
-import { useDispatch, useSelector } from "react-redux"
-import useField from "@hooks/useField"
 import { modifyCardById } from "@reducer/cardReducer"
 import { successNotification } from "@reducer/notificationReducer"
-import ModalDialog from "@components/ModalDialog"
+import { updateCardLocal } from "@utils/localStorage"
+import PropTypes from "prop-types"
+import { useDispatch, useSelector } from "react-redux"
 
 const FlashCardUpdateModal = ({ card, open, handleClose }) => {
   const categories = useSelector((state) => state.category)
@@ -34,6 +35,7 @@ const FlashCardUpdateModal = ({ card, open, handleClose }) => {
     }
     dispatch(modifyCardById(card, newContent))
     dispatch(successNotification("Se ha modificado la tarjeta correctamente"))
+    updateCardLocal(newContent)
     handleClose()
   }
   return (

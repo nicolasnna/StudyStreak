@@ -1,5 +1,6 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material"
 import {
+  pushAuxTime,
   reorderGameMode,
   selectOptionMultipleMode,
   setCurrentIndex,
@@ -16,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
+import { addAnswerHistory } from "@reducer/stadisticReducer"
 
 const MultipleSelectionMode = ({ inverse = false }) => {
   const stateGameMode = useSelector((state) =>
@@ -52,25 +54,51 @@ const MultipleSelectionMode = ({ inverse = false }) => {
 
   const handleSelectOption = (e) => {
     const selectId = e.currentTarget.getAttribute("option-value")
-    const selectIndex = e.currentTarget.getAttribute("index-value")
+    const selectIndex = parseInt(e.currentTarget.getAttribute("index-value"))
     let copyOptions = [...stateOptions[currentIndex]]
-    if (selectId === ordererCardList[currentIndex].id) {
-      copyOptions[selectIndex] = ColorOption.CORRECT
-      const newCorrectList = correctIsSelected.map((state, index) =>
-        index === currentIndex ? true : state
-      )
+
+    if (copyOptions[selectIndex] === ColorOption.DEFAULT) {
+      const isCorrect = selectId === ordererCardList[currentIndex].id
+      const color = isCorrect ? ColorOption.CORRECT : ColorOption.INCORRECT
+      const notification = isCorrect ? successNotification : errorNotification
+      const message = isCorrect
+        ? "Se ha marcado la alternativa correcta"
+        : "Se ha marcado la alternativa incorrecta"
+
+      if (copyOptions[selectIndex] !== color) {
+        dispatch(notification(message))
+      }
+      copyOptions[selectIndex] = color
+
+      if (isCorrect) {
+        const newCorrectList = correctIsSelected.map((state, index) =>
+          index === currentIndex ? true : state
+        )
+        dispatch(
+          setSelectCorrectOption({
+            mode: modeLabel,
+            selectCorrectList: newCorrectList,
+          })
+        )
+      }
+
+      dispatch(selectOptionMultipleMode(currentIndex, copyOptions, modeLabel))
+
+      const currentTime = new Date().getTime()
+      const lastTime =
+        currentIndex === 0
+          ? stateGameMode.startTime
+          : stateGameMode.auxTime[currentIndex - 1]
+
       dispatch(
-        setSelectCorrectOption({
-          mode: modeLabel,
-          selectCorrectList: newCorrectList,
-        })
+        addAnswerHistory(
+          modeLabel,
+          isCorrect,
+          (currentTime - lastTime) / 1000,
+          ordererCardList[currentIndex].id
+        )
       )
-      dispatch(successNotification("Se ha marcado la alternativa correcta"))
-    } else {
-      copyOptions[selectIndex] = ColorOption.INCORRECT
-      dispatch(errorNotification("Se ha marcado la alternativa incorrecta"))
     }
-    dispatch(selectOptionMultipleMode(currentIndex, copyOptions, modeLabel))
   }
 
   const disableNext = !(
@@ -82,6 +110,8 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   const handleNext = () => {
     if (!disableNext) {
       dispatch(setCurrentIndex({ mode: modeLabel, index: currentIndex + 1 }))
+      stateGameMode.auxTime.length === currentIndex + 1 - 1 &&
+        dispatch(pushAuxTime({ mode: modeLabel }))
     }
   }
   const handlePrev = () => {
@@ -91,6 +121,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   }
   const handleShuffle = () => {
     dispatch(reorderGameMode(cardList, modeLabel))
+    dispatch(setStartGame({ mode: modeLabel }))
   }
 
   return (
@@ -126,6 +157,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
               )[0]
             }
             disableFlip={true}
+            mode={modeLabel}
           />
           <CardControl
             currentIndex={currentIndex}

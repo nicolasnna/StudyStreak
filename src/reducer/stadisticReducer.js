@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { getCurrentFormattedDateTime } from "@utils/commonFunction"
+import { setStadisticLocal } from "@utils/localStorage"
 
 function getInitialState() {
   return {
     frequency: [],
     answer: [],
-    incorrectAnswer: [],
-    spentTime: [],
     resultGame: [],
   }
 }
@@ -31,14 +31,6 @@ const stadisticSlice = createSlice({
       const { mode, answerDetails } = action.payload
       state[mode].answer.push(answerDetails)
     },
-    pushIncorrectInfo(state, action) {
-      const { mode, incorrectDetails } = action.payload
-      state[mode].incorrectAnswer.push(incorrectDetails)
-    },
-    pushSpentTime(state, action) {
-      const { mode, spentTimeDetails } = action.payload
-      state[mode].spentTime.push(spentTimeDetails)
-    },
     pushResultGame(state, action) {
       const { mode, resultDetails } = action.payload
       state[mode].resultGame.push(resultDetails)
@@ -50,9 +42,61 @@ export const {
   setStadistic,
   pushFrequencyInfo,
   pushAnswerInfo,
-  pushIncorrectInfo,
-  pushSpentTime,
   pushResultGame,
 } = stadisticSlice.actions
+
+export const addFrequencyHistory = (mode, frequencyValue, cardId) => {
+  return async (dispatch, getState) => {
+    const freqCommand = {
+      mode: mode,
+      frequencyDetails: {
+        cardId,
+        value: frequencyValue,
+        date: getCurrentFormattedDateTime(),
+      },
+    }
+    dispatch(pushFrequencyInfo(freqCommand))
+    setStadisticLocal(getState().stadistic)
+  }
+}
+
+export const addAnswerHistory = (mode, isCorrect, timeSpent, cardId) => {
+  return async (dispatch, getState) => {
+    const currentState = getState()
+    const resultGameCurrent = currentState.stadistic[mode].resultGame
+
+    const answerHistory = {
+      mode,
+      answerDetails: {
+        cardId,
+        isCorrect,
+        timeSpent,
+        date: getCurrentFormattedDateTime(),
+        currentGameResult: resultGameCurrent.length,
+      },
+    }
+    dispatch(pushAnswerInfo(answerHistory))
+    setStadisticLocal(getState().stadistic)
+  }
+}
+
+export const addResultGame = (mode) => {
+  return async (dispatch, getState) => {
+    const stateGame = getState().game[mode]
+    const resultHistory = {
+      mode,
+      resultDetails: {
+        botCorrect: stateGame.correctBotAnswer,
+        userCorrect: stateGame.correctSelectList.filter((c) => c === true)
+          .length,
+        totalAnswer: stateGame.listCardSort.length,
+        difficulty: stateGame.botLevel,
+        date: getCurrentFormattedDateTime(),
+      },
+    }
+    dispatch(pushResultGame(resultHistory))
+    setStadisticLocal(getState().stadistic)
+  }
+}
 
 export default stadisticSlice.reducer

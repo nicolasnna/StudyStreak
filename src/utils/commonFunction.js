@@ -56,3 +56,14 @@ export const createOption = (actualCard, cards) => {
   const optionArray = FisherYates([cards[indexA], actualCard, cards[indexB]])
   return optionArray
 }
+
+export const getCurrentFormattedDateTime = () => {
+  const now = new Date()
+  return {
+    year: now.getFullYear(),
+    month: now.getMonth() + 1,
+    day: now.getDate(),
+    hour: now.getHours(),
+    minute: now.getMinutes(),
+  }
+}

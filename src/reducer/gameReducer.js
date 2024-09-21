@@ -10,6 +10,8 @@ function getInitialState() {
     optionList: [],
     stateOption: [],
     correctSelectList: [],
+    startTime: 0,
+    auxTime: [],
   }
 }
 
@@ -27,6 +29,8 @@ const gameSlice = createSlice({
     setStartGame(state, action) {
       const { mode } = action.payload
       state[mode].start = true
+      state[mode].startTime = new Date().getTime()
+      state[mode].auxTime = []
     },
     setListCard(state, action) {
       const { mode, listCardSort } = action.payload
@@ -64,6 +68,10 @@ const gameSlice = createSlice({
         state[mode].correctBotAnswer = correctAnswer
       }
     },
+    pushAuxTime(state, action) {
+      const { mode } = action.payload
+      state[mode].auxTime.push(new Date().getTime())
+    },
   },
 })
 
@@ -77,6 +85,7 @@ export const {
   setSelectCorrectOption,
   setBotLevel,
   setCorrectBotAnswer,
+  pushAuxTime,
 } = gameSlice.actions
 
 export const reorderGameMode = (listCard, mode) => async (dispatch) => {

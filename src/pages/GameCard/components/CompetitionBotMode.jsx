@@ -1,5 +1,6 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material"
 import {
+  pushAuxTime,
   reorderGameMode,
   resetBot,
   selectOptionMultipleMode,
@@ -20,6 +21,13 @@ import { useDispatch, useSelector } from "react-redux"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 import FlashCard from "@components/FlashCard/FlashCard"
+import { addAnswerHistory, addResultGame } from "@reducer/stadisticReducer"
+
+const buttonsDifficulty = [
+  { difficult: "Fácil", level: 0 },
+  { difficult: "Medio", level: 1 },
+  { difficult: "Difícil", level: 2 },
+]
 
 const CompetitionBotMode = () => {
   const [selectingOption, setSelectingOption] = useState(false)
@@ -38,6 +46,8 @@ const CompetitionBotMode = () => {
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
 
+  const disableDifficult = stateGameMode.auxTime.length !== 0
+
   if (!cardList || cardList.length < 3) {
     return (
       <WaitCard
@@ -54,49 +64,66 @@ const CompetitionBotMode = () => {
 
   const handleSelectOption = (e) => {
     const selectId = e.currentTarget.getAttribute("option-value")
-    const selectIndex = e.currentTarget.getAttribute("index-value")
+    const selectIndex = parseInt(e.currentTarget.getAttribute("index-value"))
     let copyOptions = [...stateOptions[currentIndex]]
+    const isCorrect = selectId === ordererCardList[currentIndex].id
+    const mode = "vsbot"
+    const notification = isCorrect ? successNotification : errorNotification
+    const message = isCorrect
+      ? "Respuesta correcta. Cambiando tarjeta..."
+      : "Respuesta incorrecta. Cambiando tarjeta..."
 
-    if (selectId === ordererCardList[currentIndex].id) {
-      copyOptions[selectIndex] = ColorOption.CORRECT
+    copyOptions[selectIndex] = isCorrect
+      ? ColorOption.CORRECT
+      : ColorOption.INCORRECT
+    dispatch(notification(message))
+    dispatch(selectOptionMultipleMode(currentIndex, copyOptions, mode))
+
+    if (isCorrect) {
       const newCorrectList = correctIsSelected.map((state, index) =>
         index === currentIndex ? true : state
       )
-
       dispatch(
         setSelectCorrectOption({
-          mode: "vsbot",
+          mode,
           selectCorrectList: newCorrectList,
         })
       )
-      dispatch(successNotification("Respuesta correcta. Cambiando tarjeta..."))
-    } else {
-      copyOptions[selectIndex] = ColorOption.INCORRECT
-      dispatch(errorNotification("Respuesta incorrecta. Cambiando tarjeta..."))
     }
-
-    dispatch(selectOptionMultipleMode(currentIndex, copyOptions, "vsbot"))
     setSelectingOption(true)
 
-    // Calculate answer of bot
     const correctAdd = calculateBotAnswer(botLevel)
-    console.log(correctAdd)
-
     dispatch(
       setCorrectBotAnswer({
-        mode: "vsbot",
+        mode,
         correctAnswer: totalCorrectBot + correctAdd,
       })
     )
 
+    const currentTime = new Date().getTime()
+    const lastTime =
+      currentIndex === 0
+        ? stateGameMode.startTime
+        : stateGameMode.auxTime[currentIndex - 1]
+
+    dispatch(
+      addAnswerHistory(
+        mode,
+        isCorrect,
+        (currentTime - lastTime) / 1000,
+        ordererCardList[currentIndex].id
+      )
+    )
+
     setTimeout(() => {
       if (currentIndex < ordererCardList.length - 1) {
-        dispatch(setCurrentIndex({ mode: "vsbot", index: currentIndex + 1 }))
-        setSelectingOption(false)
+        dispatch(setCurrentIndex({ mode, index: currentIndex + 1 }))
+        dispatch(pushAuxTime({ mode: mode }))
       } else {
-        setSelectingOption(false)
         setShowResult(true)
+        dispatch(addResultGame(mode))
       }
+      setSelectingOption(false)
     }, 1000)
   }
 
@@ -105,10 +132,12 @@ const CompetitionBotMode = () => {
     setShowResult(false)
     dispatch(successNotification("Se ha iniciado un nuevo juego"))
     dispatch(resetBot("vsbot"))
+    dispatch(setStartGame({ mode: "vsbot" }))
   }
 
   const changeLevelBot = (newLevel) => {
     dispatch(setBotLevel({ mode: "vsbot", level: newLevel }))
+    dispatch(setStartGame({ mode: "vsbot" }))
   }
 
   const result = () => {
@@ -145,30 +174,20 @@ const CompetitionBotMode = () => {
               Selecciona el nivel de dificultad:
             </Typography>
             <Box className="game-mode__content__difficulty__buttons">
-              <Button
-                onClick={() => changeLevelBot(0)}
-                className={
-                  botLevel === 0 ? "button--primary--active" : "button--primary"
-                }
-              >
-                <strong>Fácil</strong>
-              </Button>
-              <Button
-                onClick={() => changeLevelBot(1)}
-                className={
-                  botLevel === 1 ? "button--primary--active" : "button--primary"
-                }
-              >
-                <strong>Medio</strong>
-              </Button>
-              <Button
-                onClick={() => changeLevelBot(2)}
-                className={
-                  botLevel === 2 ? "button--primary--active" : "button--primary"
-                }
-              >
-                <strong>Difícil</strong>
-              </Button>
+              {buttonsDifficulty.map((b) => (
+                <Button
+                  key={`difficult button ${b.level}`}
+                  onClick={() => changeLevelBot(b.level)}
+                  className={
+                    botLevel === b.level
+                      ? "button--primary--active"
+                      : "button--primary"
+                  }
+                  disabled={botLevel === b.level ? false : disableDifficult}
+                >
+                  <strong>{b.difficult}</strong>
+                </Button>
+              ))}
             </Box>
           </Box>
           <Box>
@@ -189,6 +208,7 @@ const CompetitionBotMode = () => {
               )[0]
             }
             disableFlip={true}
+            mode="vsbot"
           />
           <Box>
             <Typography className="card-control__enumeration-card">

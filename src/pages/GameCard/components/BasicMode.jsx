@@ -17,8 +17,14 @@ const BasicMode = () => {
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
 
-  if (!cardList || cardList.length === 0) {
-    return <WaitCard Title="Modo revisión básica" />
+  if (!cardList || cardList.length < 3) {
+    return (
+      <WaitCard
+        Title="Modo revisión básica"
+        Body2="Se requiere un mínimo de 3 tarjetas para este modo."
+        Body3="Si no ha añadido ninguna tarjeta, dirijase a la sección de 'Gestionar tarjetas'"
+      />
+    )
   }
 
   const disableNext = currentIndex === ordererCardList.length - 1

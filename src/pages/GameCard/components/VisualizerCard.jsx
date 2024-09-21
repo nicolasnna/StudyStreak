@@ -5,29 +5,31 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward"
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward"
 import { changeFrequency } from "@reducer/cardReducer"
 import { useDispatch, useSelector } from "react-redux"
+import { addFrequencyHistory } from "@reducer/stadisticReducer"
 
 const VisualizerCard = ({
   disableFlip = false,
   showFront = true,
   cardContent,
+  mode = "none",
 }) => {
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
+
   const ClickUpArrow = (e) => {
     e.preventDefault()
-    if (cardContent.revision_frequency !== 1) {
-      dispatch(changeFrequency(1, cardContent.id, cardList))
-    } else {
-      dispatch(changeFrequency(0, cardContent.id, cardList))
-    }
+    const newValue = cardContent.revision_frequency !== 1 ? 1 : 0
+    dispatch(changeFrequency(newValue, cardContent.id, cardList))
+    mode !== "none" &&
+      dispatch(addFrequencyHistory(mode, newValue, cardContent.id))
   }
+
   const ClickDownArrow = (e) => {
     e.preventDefault()
-    if (cardContent.revision_frequency !== -1) {
-      dispatch(changeFrequency(-1, cardContent.id, cardList))
-    } else {
-      dispatch(changeFrequency(0, cardContent.id, cardList))
-    }
+    const newValue = cardContent.revision_frequency === -1 ? 0 : -1
+    dispatch(changeFrequency(newValue, cardContent.id, cardList))
+    mode !== "none" &&
+      dispatch(addFrequencyHistory(mode, newValue, cardContent.id))
   }
 
   const UpArrow =
@@ -84,6 +86,7 @@ VisualizerCard.propTypes = {
   disableFlip: PropTypes.bool,
   changeFrequency: PropTypes.func,
   showFront: PropTypes.bool,
+  mode: PropTypes.string,
 }
 
 export default VisualizerCard
