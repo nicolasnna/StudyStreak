@@ -6,9 +6,15 @@ import GameCard from "@pages/GameCard/GameCard"
 import Home from "@pages/Home/Home"
 import ManageCards from "@pages/ManageCards/ManageCards"
 import PageNotFound from "@pages/PageNotFound/PageNotFound"
+import Stadistics from "@pages/Stadistics/Stadistics"
 import { setCards } from "@reducer/cardReducer"
 import { setCategories } from "@reducer/categoryReducer"
-import { getCardLocal, getCategoryLocal } from "@utils/localStorage"
+import { setStadistic } from "@reducer/stadisticReducer"
+import {
+  getCardLocal,
+  getCategoryLocal,
+  getStadisticLocal,
+} from "@utils/localStorage"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { Route, Routes } from "react-router-dom"
@@ -19,6 +25,7 @@ function App() {
   useEffect(() => {
     dispatch(setCards(getCardLocal()))
     dispatch(setCategories(getCategoryLocal()))
+    dispatch(setStadistic(...getStadisticLocal()))
   }, [dispatch])
 
   return (
@@ -30,6 +37,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/gestionar-tarjetas" element={<ManageCards />} />
           <Route path="/modos-de-juego/*" element={<GameCard />} />
+          <Route path="/estadisticas" element={<Stadistics />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Container>

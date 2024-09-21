@@ -1,4 +1,5 @@
 @import '@styles/base/index'
+@include appear-from-down(appear)
 
 .card-link
   display: flex
@@ -12,6 +13,7 @@
   box-shadow: $box-shadow-secondary
   padding: 1em
   width: 20rem
+  animation: appear .5s ease-out forwards
   
   &__title
     font-size: $size-text-high !important

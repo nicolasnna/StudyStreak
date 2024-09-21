@@ -1,0 +1,75 @@
+@import '@styles/base/index'
+
+.table-history
+  padding: $padding-normal
+  border-radius: $border-radius-normal
+  background-color: $background-secondary
+  box-shadow: $box-shadow-primary
+  margin-bottom: 2rem
+
+  &__icon
+    color: $primary
+
+  &__buttons
+    display: flex
+    flex-direction: row
+    gap: 0.5rem
+    padding: 0.4rem
+    justify-content: right
+
+  &__head
+    font-size: 1.3rem
+    background-color: $primary
+    
+    &__cell
+      color: $background !important
+      font-weight: bold !important
+      letter-spacing: 0.07rem !important
+      
+  &__body
+    background-color: $secondary  
+
+    &__row
+      font-size: 1.1rem
+      &:hover
+        background-color: rgba($primary, 0.2)
+
+      &__cell
+        color: $text !important
+
+      &--history
+        border-bottom: 2px solid $accent
+
+        &__content
+          padding: 0.5rem
+          margin-bottom: 0.75rem
+
+          &--table
+            border: 2px solid rgba($accent, 1)
+            
+          &--title
+            font-size: 1.15rem !important
+            color: $text
+          
+          &__head
+            background-color: rgba($primary, 0.9)
+            font-size: 1rem
+            &__cell
+              color: $background !important
+              text-align: center !important
+          
+          &__body
+            background-color: rgba($secondary, 0.1)
+            &--row
+              font-size: 0.9rem
+              &:hover
+                background-color: rgba($primary, 0.2)
+              & > *
+                color: $text !important
+                text-align: center !important
+  &--no-history
+    font-size: 1.1rem
+    & > *
+      color: $text !important
+      &:hover
+        background-color: rgba($primary, 0.2)

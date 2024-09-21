@@ -65,5 +65,6 @@ export const getCurrentFormattedDateTime = () => {
     day: now.getDate(),
     hour: now.getHours(),
     minute: now.getMinutes(),
+    seconds: now.getSeconds(),
   }
 }
