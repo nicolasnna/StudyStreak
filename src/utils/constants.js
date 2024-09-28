@@ -24,6 +24,12 @@ export const CardKeys = [
   "revision_frequency",
 ]
 
+export const ColorChar = Object.freeze({
+  easy: "#893cee",
+  medium: "#a6aaac75",
+  hard: "#551aa2",
+})
+
 export const ColorOption = Object.freeze({
   DEFAULT: "#d2dee470",
   CORRECT: "rgb(0,220,0,0.5)",

@@ -6,6 +6,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
@@ -74,13 +75,31 @@ const TableHistory = (props) => {
           </TableRow>
         </TableHead>
         <TableBody className="table-history__body">
-          {cardList.map((c, index) => (
-            <TableHistoryRow
-              key={`history row ${index}`}
-              card={c}
-              answerHistory={mode !== "none" ? stadistic[mode].answer : []}
-            />
-          ))}
+          {cardList.length !== 0 &&
+            mode !== "none" &&
+            cardList.map((c, index) => (
+              <TableHistoryRow
+                key={`history row ${index}`}
+                card={c}
+                answerHistory={mode !== "none" ? stadistic[mode].answer : []}
+              />
+            ))}
+          {cardList.length === 0 && (
+            <TableRow className="table-history--no-history">
+              <TableCell align="center" colSpan={7}>
+                <Typography>Sin tarjetas creadas</Typography>
+              </TableCell>
+            </TableRow>
+          )}
+          {mode === "none" && (
+            <TableRow className="table-history--no-history">
+              <TableCell align="center" colSpan={7}>
+                <Typography>
+                  Seleccione un modo juego para la revisión
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </Box>

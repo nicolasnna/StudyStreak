@@ -2,7 +2,7 @@ import Header from "@components/Header"
 import { Box } from "@mui/material"
 import React from "react"
 import ResponsiveTableHistory from "./components/ResponsiveTableHistory"
-import ResumeCards from "./components/ResumeCards"
+import ResumeBot from "./components/ResumeBot"
 
 const Stadistics = (props) => {
   return (
@@ -11,7 +11,7 @@ const Stadistics = (props) => {
         Title="Estadísticas de juego"
         SubTitle="Revisa tus resultados a lo largo del tiempo"
       />
-      <ResumeCards />
+      <ResumeBot />
       <ResponsiveTableHistory />
     </Box>
   )
