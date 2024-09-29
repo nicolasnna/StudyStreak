@@ -12,6 +12,7 @@ const VisualizerCard = ({
   showFront = true,
   cardContent,
   mode = "none",
+  classExtra = "",
 }) => {
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
@@ -47,6 +48,7 @@ const VisualizerCard = ({
       gap={5}
       alignItems={"center"}
       justifyContent={"center"}
+      className={classExtra}
     >
       <Box>
         <IconButton onClick={ClickDownArrow} aria-label="decrement-frequency">
@@ -87,6 +89,7 @@ VisualizerCard.propTypes = {
   changeFrequency: PropTypes.func,
   showFront: PropTypes.bool,
   mode: PropTypes.string,
+  classExtra: PropTypes.string,
 }
 
 export default VisualizerCard

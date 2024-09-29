@@ -42,6 +42,10 @@ export const BotLevelProb = Object.freeze({
   2: 0.7,
 })
 
+export const sizeScreen = Object.freeze({
+  MOBILE: 768,
+})
+
 export const CardLinkContent = [
   {
     key: "card link 1",
@@ -62,6 +66,13 @@ export const CardLinkContent = [
     contentText:
       "Distintos modos de estudio: básico, selección múltiple, selección inverso, contra bot.",
     urlLink: "/modos-de-juego",
+  },
+  {
+    key: "card link 4",
+    title: "Revisa tus estadísticas",
+    contentText:
+      "Revisa tus estadisticas de los distintos modos de juegos y el porcentaje de acierto.",
+    urlLink: "/estadisticas",
   },
 ]
 

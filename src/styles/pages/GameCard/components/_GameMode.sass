@@ -16,6 +16,16 @@
   padding: 2em
   gap: 1em
 
+  &__alert-sizescreen
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 1rem
+    text-align: center
+    margin: 2rem 0
+    color: $accent
+    font-size: $size-text-high
+
   &__title
     font-size: $size-text-big !important
     color: $text
@@ -81,3 +91,30 @@
       flex-direction: row
       flex-wrap: wrap
       gap: 1em
+
+@keyframes correctMove
+  0% 
+    transform: translateY(0)
+  50%
+    transform: translateY(-20px)
+  100% 
+    transform: translateY(0)
+
+@keyframes incorrectMove
+  0%
+    transform: translateX(0)
+  25% 
+    transform: translateX(-10px)
+  50% 
+    transform: translateX(10px)
+  75% 
+    transform: translateX(-10px)
+  100% 
+    transform: translateX(0)
+  
+
+.correct-animation
+  animation: correctMove 0.3s linear
+
+.incorrect-animation
+  animation: incorrectMove 0.5s linear

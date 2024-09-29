@@ -15,13 +15,14 @@ import {
   successNotification,
 } from "@reducer/notificationReducer"
 import { calculateBotAnswer } from "@utils/commonFunction"
-import { ColorOption } from "@utils/constants"
+import { ColorOption, sizeScreen } from "@utils/constants"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 import FlashCard from "@components/FlashCard/FlashCard"
 import { addAnswerHistory, addResultGame } from "@reducer/stadisticReducer"
+import useWindowSize from "@hooks/useWindowSize"
 
 const buttonsDifficulty = [
   { difficult: "Fácil", level: 0 },
@@ -30,6 +31,7 @@ const buttonsDifficulty = [
 ]
 
 const CompetitionBotMode = () => {
+  const [animationClass, setAnimationClass] = useState("")
   const [selectingOption, setSelectingOption] = useState(false)
   const stateGameMode = useSelector((state) => state.game.vsbot)
   const startGame = stateGameMode.start
@@ -45,8 +47,19 @@ const CompetitionBotMode = () => {
   const totalCorrectBot = stateGameMode.correctBotAnswer
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
-
+  const { width } = useWindowSize()
   const disableDifficult = stateGameMode.auxTime.length !== 0
+
+  if (width < sizeScreen.MOBILE) {
+    return (
+      <Box className="game-mode__alert-sizescreen">
+        <Typography>
+          Para jugar en el modo contra bots, cambia la pantalla a orientación
+          horizontal o utiliza el modo escritorio.
+        </Typography>
+      </Box>
+    )
+  }
 
   if (!cardList || cardList.length < 3) {
     return (
@@ -78,6 +91,9 @@ const CompetitionBotMode = () => {
       : ColorOption.INCORRECT
     dispatch(notification(message))
     dispatch(selectOptionMultipleMode(currentIndex, copyOptions, mode))
+
+    setAnimationClass(isCorrect ? "correct-animation" : "incorrect-animation")
+    setTimeout(() => setAnimationClass(""), 500)
 
     if (isCorrect) {
       const newCorrectList = correctIsSelected.map((state, index) =>
@@ -209,6 +225,7 @@ const CompetitionBotMode = () => {
             }
             disableFlip={true}
             mode="vsbot"
+            classExtra={animationClass}
           />
           <Box>
             <Typography className="card-control__enumeration-card">

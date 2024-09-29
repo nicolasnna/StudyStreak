@@ -9,7 +9,7 @@ const Stadistics = (props) => {
     <Box>
       <Header
         Title="Estadísticas de juego"
-        SubTitle="Revisa tus resultados a lo largo del tiempo"
+        SubTitle="Revisa tus resultados en cada modo de juego"
       />
       <ResumeBot />
       <ResponsiveTableHistory />

@@ -2,8 +2,11 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Box, Typography } from "@mui/material"
 import GitHubIcon from "@mui/icons-material/GitHub"
+import useWindowSize from "@hooks/useWindowSize"
+import { sizeScreen } from "@utils/constants"
 
 const Footer = (props) => {
+  const { width } = useWindowSize()
   return (
     <Box className="footer">
       <Typography>
@@ -28,11 +31,13 @@ const Footer = (props) => {
           <GitHubIcon />
         </a>
       </Box>
-      <img
-        className="footer__icon"
-        src="/logo full without bg.png"
-        alt="logo web"
-      />
+      {width >= sizeScreen.MOBILE && (
+        <img
+          className="footer__icon"
+          src="/logo full without bg.png"
+          alt="logo web"
+        />
+      )}
     </Box>
   )
 }

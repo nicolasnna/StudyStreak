@@ -11,15 +11,18 @@ import {
   errorNotification,
   successNotification,
 } from "@reducer/notificationReducer"
-import { ColorOption } from "@utils/constants"
+import { ColorOption, sizeScreen } from "@utils/constants"
 import PropTypes from "prop-types"
 import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
 import { addAnswerHistory } from "@reducer/stadisticReducer"
+import { useState } from "react"
+import useWindowSize from "@hooks/useWindowSize"
 
 const MultipleSelectionMode = ({ inverse = false }) => {
+  const [animationClass, setAnimationClass] = useState("")
   const stateGameMode = useSelector((state) =>
     inverse ? state.game.multipleInverse : state.game.multiple
   )
@@ -33,6 +36,18 @@ const MultipleSelectionMode = ({ inverse = false }) => {
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
   const modeLabel = inverse ? "multipleInverse" : "multiple"
+  const { width } = useWindowSize()
+
+  if (width < sizeScreen.MOBILE) {
+    return (
+      <Box className="game-mode__alert-sizescreen">
+        <Typography>
+          Para jugar en el modo selección, cambia la pantalla a orientación
+          horizontal o utiliza el modo escritorio.
+        </Typography>
+      </Box>
+    )
+  }
 
   if (!cardList || cardList.length < 3) {
     return (
@@ -98,6 +113,8 @@ const MultipleSelectionMode = ({ inverse = false }) => {
           ordererCardList[currentIndex].id
         )
       )
+      setAnimationClass(isCorrect ? "correct-animation" : "incorrect-animation")
+      setTimeout(() => setAnimationClass(""), 500)
     }
   }
 
@@ -158,6 +175,7 @@ const MultipleSelectionMode = ({ inverse = false }) => {
             }
             disableFlip={true}
             mode={modeLabel}
+            classExtra={animationClass}
           />
           <CardControl
             currentIndex={currentIndex}

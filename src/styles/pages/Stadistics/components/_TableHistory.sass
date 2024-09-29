@@ -1,11 +1,22 @@
 @import '@styles/base/index'
 
-.table-history
+
+.table-history, .table-history--responsive
   padding: $padding-normal
   border-radius: $border-radius-normal
   background-color: $background-secondary
   box-shadow: $box-shadow-primary
   margin-bottom: 2rem
+
+
+.table-history
+  &--responsive
+    display: flex
+    justify-content: center
+    align-items: center
+    text-align: center
+    font-size: $size-text-normal 
+    color: $text 
 
   &__icon
     color: $primary

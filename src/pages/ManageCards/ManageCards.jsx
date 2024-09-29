@@ -1,8 +1,8 @@
-import { Box, Stack, Typography } from "@mui/material"
-import { useSelector } from "react-redux"
-import CardForm from "./components/CardForm"
 import FlashCard from "@components/FlashCard/FlashCard"
 import Header from "@components/Header"
+import { Box, Typography } from "@mui/material"
+import { useSelector } from "react-redux"
+import CardForm from "./components/CardForm"
 import JsonManager from "./components/JsonManager"
 
 const ManageCards = () => {
@@ -12,18 +12,12 @@ const ManageCards = () => {
     <Box>
       <Header
         Title={"Gestiona tus Tarjetas de Estudio"}
-        SubTitle=" Organiza, personaliza y mantén tu contenido actualizado."
+        SubTitle="Organiza, personaliza y mantén tu contenido actualizado."
       />
-      <Stack
-        flexDirection={"row"}
-        alignItems="center"
-        justifyContent="center"
-        gap={6}
-        padding={1}
-      >
+      <Box className="manage-cards__container-manager">
         <CardForm />
         <JsonManager />
-      </Stack>
+      </Box>
       <Box className="manage-cards__list">
         <Typography className="manage-cards__list__text--title" variant="h2">
           Tarjetas creadas

@@ -68,6 +68,7 @@ const GameCard = () => {
         alignItems={"center"}
         justifyContent={"center"}
         gap={2}
+        flexWrap={"wrap"}
       >
         {buttonRoutes.map((b) => (
           <Link key={b.key} to={b.link}>
@@ -77,9 +78,13 @@ const GameCard = () => {
                   ? "button--primary--active"
                   : "button--primary"
               }
-              sx={{ textTransform: "none" }}
+              sx={{
+                textTransform: "none",
+                width: "8rem",
+                height: "5rem",
+              }}
             >
-              <Typography fontSize={FontSize.HIGH}>{b.label}</Typography>
+              <Typography fontSize={"1.05rem"}>{b.label}</Typography>
             </Button>
           </Link>
         ))}

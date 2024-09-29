@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux"
 import CardControl from "./CardControl"
 import VisualizerCard from "./VisualizerCard"
 import WaitCard from "./WaitCard"
+import { sizeScreen } from "@utils/constants"
+import useWindowSize from "@hooks/useWindowSize"
 
 const BasicMode = () => {
   const stateGameMode = useSelector((state) => state.game.basic)
@@ -16,6 +18,18 @@ const BasicMode = () => {
   const startGame = stateGameMode.start
   const cardList = useSelector((state) => state.card)
   const dispatch = useDispatch()
+  const { width } = useWindowSize()
+
+  if (width < sizeScreen.MOBILE) {
+    return (
+      <Box className="game-mode__alert-sizescreen">
+        <Typography>
+          Para jugar en el modo básico, cambia la pantalla a orientación
+          horizontal o utiliza el modo escritorio.
+        </Typography>
+      </Box>
+    )
+  }
 
   if (!cardList || cardList.length < 3) {
     return (
