@@ -14,9 +14,7 @@
  <a href="#acerca-de">Acerca de</a> •
  <a href="#caracteristicas">Caracteristicas</a> •
  <a href="#despliegue-local">Despliegue local</a> • 
- <a href="#tech-stack">Tech Stack</a> •  
- <a href="#author">Author</a> • 
- <a href="#user-content-license">License</a>
+ <a href="#stack-tecnológico">Stack Tecnológico</a> •  
 </p>
 
 ## Acerca de
