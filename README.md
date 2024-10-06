@@ -14,7 +14,7 @@
  <a href="#acerca-de">Acerca de</a> •
  <a href="#caracteristicas">Caracteristicas</a> •
  <a href="#despliegue-local">Despliegue local</a> • 
- <a href="#stack-tecnológico">Stack Tecnológico</a> •  
+ <a href="#stack-tecnológico">Stack Tecnológico</a> 
 </p>
 
 ## Acerca de
