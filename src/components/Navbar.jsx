@@ -30,7 +30,7 @@ const Navbar = () => {
   const { width } = useWindowSize()
 
   const urlBaseLogo =
-    import.meta.env.MODE === "production" ? "study-streak" : ""
+    import.meta.env.MODE === "production" ? "/study-streak" : ""
 
   if (width < sizeScreen.MOBILE) {
     return (

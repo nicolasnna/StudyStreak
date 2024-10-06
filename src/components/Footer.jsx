@@ -8,7 +8,7 @@ import { sizeScreen } from "@utils/constants"
 const Footer = (props) => {
   const { width } = useWindowSize()
   const urlBaseLogo =
-    import.meta.env.MODE === "production" ? "study-streak" : ""
+    import.meta.env.MODE === "production" ? "/study-streak" : ""
 
   return (
     <Box className="footer">
