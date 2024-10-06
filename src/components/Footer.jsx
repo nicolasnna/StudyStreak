@@ -7,6 +7,9 @@ import { sizeScreen } from "@utils/constants"
 
 const Footer = (props) => {
   const { width } = useWindowSize()
+  const urlBaseLogo =
+    import.meta.env.MODE === "production" ? "study-streak" : ""
+
   return (
     <Box className="footer">
       <Typography>
@@ -34,7 +37,7 @@ const Footer = (props) => {
       {width >= sizeScreen.MOBILE && (
         <img
           className="footer__icon"
-          src="/logo full without bg.png"
+          src={urlBaseLogo + "/logo full without bg.png"}
           alt="logo web"
         />
       )}

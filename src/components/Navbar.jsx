@@ -29,6 +29,9 @@ const navbarOption = [
 const Navbar = () => {
   const { width } = useWindowSize()
 
+  const urlBaseLogo =
+    import.meta.env.MODE === "production" ? "study-streak" : ""
+
   if (width < sizeScreen.MOBILE) {
     return (
       <Box className="navbar">
@@ -45,7 +48,7 @@ const Navbar = () => {
       {width > 1080 && (
         <img
           className="navbar__icon"
-          src="/logo full without bg.png"
+          src={urlBaseLogo + "/logo full without bg.png"}
           alt="logo web"
         />
       )}

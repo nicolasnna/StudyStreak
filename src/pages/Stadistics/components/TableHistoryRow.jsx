@@ -59,8 +59,10 @@ const TableHistoryRow = ({ card, answerHistory = [] }) => {
         <TableCell className="table-history__body__row__cell" align="center">
           {cardHistory.length > 0 &&
             (
-              cardHistory.filter((a) => a.isCorrect).length / cardHistory.length
-            ).toFixed(4) * 100}{" "}
+              (cardHistory.filter((a) => a.isCorrect).length /
+                cardHistory.length) *
+              100
+            ).toFixed(0)}
           %
         </TableCell>
       </TableRow>
